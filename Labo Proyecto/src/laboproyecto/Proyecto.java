@@ -4,11 +4,16 @@
  */
 package laboproyecto;
 
+import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Color;
+
 /**
  *
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
+
     /**
      * Creates new form Proyecto
      */
@@ -28,22 +33,28 @@ public class Proyecto extends javax.swing.JFrame {
         UsuariosFrame = new javax.swing.JFrame();
         Agregar = new javax.swing.JButton();
         Eliminar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TablaScroll = new javax.swing.JScrollPane();
+        Tabla = new javax.swing.JTable();
         Regresar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        Id = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         Usuarios = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
 
+        UsuariosFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         UsuariosFrame.setTitle("Usuarios");
         UsuariosFrame.setMinimumSize(new java.awt.Dimension(549, 345));
 
         Agregar.setText("Agregar");
+        Agregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AgregarMouseClicked(evt);
+            }
+        });
 
         Eliminar.setText("Eliminar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -61,9 +72,8 @@ public class Proyecto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setToolTipText("");
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getAccessibleContext().setAccessibleParent(null);
+        Tabla.setToolTipText("");
+        TablaScroll.setViewportView(Tabla);
 
         Regresar.setText("Regresar");
         Regresar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -72,8 +82,19 @@ public class Proyecto extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setText("Introduce el ID");
-        jTextField1.setToolTipText("Introduce el ID");
+        Id.setForeground(java.awt.Color.gray);
+        Id.setText("Introduce el ID");
+        Id.setToolTipText("Introduce el ID");
+        Id.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        Id.setName("Introduce el ID"); // NOI18N
+        Id.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                IdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                IdFocusLost(evt);
+            }
+        });
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -84,13 +105,13 @@ public class Proyecto extends javax.swing.JFrame {
             .addGroup(UsuariosFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+                    .addComponent(TablaScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
                     .addGroup(UsuariosFrameLayout.createSequentialGroup()
                         .addComponent(Agregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1)
+                        .addComponent(Id)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Eliminar))
                     .addGroup(UsuariosFrameLayout.createSequentialGroup()
@@ -102,19 +123,20 @@ public class Proyecto extends javax.swing.JFrame {
             UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, UsuariosFrameLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Agregar)
-                    .addComponent(Eliminar)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Agregar)
+                        .addComponent(Eliminar)
+                        .addComponent(Id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TablaScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Regresar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jTextField1.getAccessibleContext().setAccessibleName("Introduce el ID");
+        Id.getAccessibleContext().setAccessibleName("Introduce el ID");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inicio");
@@ -176,15 +198,49 @@ public class Proyecto extends javax.swing.JFrame {
         UsuariosFrame.setVisible(false);
     }//GEN-LAST:event_RegresarMouseClicked
 
+    private void IdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_IdFocusGained
+        // TODO add your handling code here:
+        if (Id.getText().equals("Introduce el ID")) {
+            Id.setForeground(Color.BLACK);
+            Id.setText("");
+        }
+    }//GEN-LAST:event_IdFocusGained
+
+    private void IdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_IdFocusLost
+        // TODO add your handling code here:
+        if (Id.getText().isEmpty()) {
+            Id.setForeground(Color.GRAY);
+            Id.setText("Introduce el ID");
+        }
+    }//GEN-LAST:event_IdFocusLost
+
+    private void AgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgregarMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_AgregarMouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF: " + ex);
+
+            try {
+                FlatLightLaf.setup();
+            } catch (Exception ex2) {
+                System.err.println("Failed to initialize LaF: " + ex2);
+            }
+        }
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+         */ /*
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -200,7 +256,7 @@ public class Proyecto extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        } */
         //</editor-fold>
 
         /* Create and display the form */
@@ -214,13 +270,13 @@ public class Proyecto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
     private javax.swing.JButton Eliminar;
+    private javax.swing.JTextField Id;
     private javax.swing.JButton Regresar;
     private javax.swing.JButton Salir;
+    private javax.swing.JTable Tabla;
+    private javax.swing.JScrollPane TablaScroll;
     private javax.swing.JButton Usuarios;
     private javax.swing.JFrame UsuariosFrame;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
