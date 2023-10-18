@@ -60,7 +60,14 @@ public class Usuarios {
     }
 
     public boolean deleteUser(int id){
-        
+        int len = usuarios.size();
+        for(int user = 0; user < len; user++){
+            if( usuarios.get(user).id == id ){
+                usuarios.remove(user);
+                return true;
+            }
+        }
+        return false;
     }
     
 }
