@@ -5,6 +5,7 @@
 package laboproyecto;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -73,73 +74,28 @@ public class Usuarios {
         return false;
     }
 
-    private class UsuariosTableModel implements TableModel {
-
-        @Override
-        public int getRowCount() {
-            return usuarios.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return usuarios.getClass().getDeclaredFields().length;
-        }
-
-        @Override
-        public String getColumnName(int i) {
-            return usuarios.getClass().getDeclaredFields()[i].toString();
-        }
-
-        @Override
-        public Class<?> getColumnClass(int i) {
-            return usuarios.getClass().getDeclaredFields()[i].getClass();
-        }
-
-        @Override
-        public boolean isCellEditable(int i, int i1) {
-            return false;
-        }
-
-        @Override
-        public Object getValueAt(int i, int i1) {
-            Usuario user = usuarios.get(i);
-
-            switch (i1) {
-                case 0 -> {
-                    return user.id;
-                }
-                case 1 -> {
-                    return user.user_name;
-                }
-                case 2 -> {
-                    return user.saldo;
-                }
-                default -> {
-                    return null;
-                }
-            }
-        }
-
-        @Override
-        public void setValueAt(Object o, int i, int i1) {
-            usuarios.set(i, element);
-            
-        }
-
-        @Override
-        public void addTableModelListener(TableModelListener tl) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-        @Override
-        public void removeTableModelListener(TableModelListener tl) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-    }
-
     public TableModel toTableModel() {
-        TableModel data = new MyTableModel();
+
+        TableModel data = new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                    usuarios.stream().map(u -> u.id).collect(Collectors.toList()),
+                    {null, null, null},
+                    {null, null, null}
+                },
+                new String[]{
+                    "ID", "Usuario", "Saldo"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+
+        return data;
     }
 
 }
