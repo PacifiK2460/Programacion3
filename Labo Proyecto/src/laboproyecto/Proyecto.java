@@ -13,6 +13,7 @@ import java.awt.Color;
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
+    Usuarios usuarios = new Usuarios();
 
     /**
      * Creates new form Proyecto
@@ -190,6 +191,7 @@ public class Proyecto extends javax.swing.JFrame {
         // TODO add your handling code here:
         UsuariosFrame.setVisible(true);
         this.setVisible(false);
+        
     }//GEN-LAST:event_UsuariosMouseClicked
 
     private void RegresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegresarMouseClicked
