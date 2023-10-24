@@ -5,11 +5,14 @@
 package laboproyecto;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,7 +23,7 @@ public class Usuarios {
     // Keep track of ids
     private static int last_id;
 
-    private class Usuario {
+    private class Usuario implements Comparable<Usuario> {
 
         private final int id;
         private final String user_name;
@@ -43,6 +46,18 @@ public class Usuarios {
         public double getSaldo() {
             return saldo;
         }
+
+        @Override
+        public int compareTo(Usuario t) {
+            if (this.saldo < t.saldo) {
+                return -1;
+            } else if (this.saldo == t.saldo) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+
     }
 
     private static ArrayList<Usuario> usuarios;
@@ -79,17 +94,12 @@ public class Usuarios {
     }
 
     public boolean deleteUser(int id) {
-        int len = usuarios.size();
-        for (int user = 0; user < len; user++) {
-            if (usuarios.get(user).id == id) {
-                Usuario deleted = usuarios.remove(user);
 
-                // TODO! Donar el 10% del saldo al usuario mas bajo.
-                return true;
-            }
-        }
-
-        return false;
+        Optional<Usuario> usuario_a_eliminar = usuarios.stream()
+                .filter(usuario -> usuario.id == id)
+                .findFirst();
+        
+        if(usuario)
     }
 
     public TableModel toTableModel() {
