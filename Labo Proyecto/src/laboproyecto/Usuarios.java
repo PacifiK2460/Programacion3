@@ -5,9 +5,11 @@
 package laboproyecto;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.stream.Collectors;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -46,16 +48,29 @@ public class Usuarios {
     private static ArrayList<Usuario> usuarios;
 
     public Usuarios() {
-        Usuarios.last_id = 100;
+        Usuarios.last_id = 99;
         usuarios = new ArrayList<>();
     }
 
     public boolean addUser() {
-        // TODO: Generate user data
+        last_id += 1;
+        int id = last_id;
 
-        int id = last_id + 1;
-        String user_name = "usuario";
-        double saldo = 0;
+        String user_name = new String();
+        
+        char CaracteresEspeciales[] = {'¡', '#', '$', '&', '/', '?', '¿', '!','.','_'};
+        
+        user_name += ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += CaracteresEspeciales[ThreadLocalRandom.current().nextInt(0, CaracteresEspeciales.length + 1)];
+        user_name += ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+
+        double saldo = id;
 
         Usuario new_user = new Usuario(id, user_name, saldo);
         boolean add = usuarios.add(new_user);
@@ -75,13 +90,20 @@ public class Usuarios {
     }
 
     public TableModel toTableModel() {
+        // Create a 2D array to hold the data
+        Object[][] data = new Object[usuarios.size()][3];
 
-        TableModel data = new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    usuarios.stream().map(u -> u.id).collect(Collectors.toList()),
-                    {null, null, null},
-                    {null, null, null}
-                },
+        // Fill the array with data from the ArrayList
+        for (int i = 0; i < usuarios.size(); i++) {
+            Usuario user = usuarios.get(i);
+            data[i][0] = user.id;
+            data[i][1] = user.user_name;
+            data[i][2] = user.saldo;
+        }
+
+        // Create the TableModel
+        TableModel tableModel = new javax.swing.table.DefaultTableModel(
+                data,
                 new String[]{
                     "ID", "Usuario", "Saldo"
                 }
@@ -95,7 +117,7 @@ public class Usuarios {
             }
         };
 
-        return data;
+        return tableModel;
     }
 
 }

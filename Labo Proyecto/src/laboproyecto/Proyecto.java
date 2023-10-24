@@ -13,6 +13,7 @@ import java.awt.Color;
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
+
     Usuarios usuarios = new Usuarios();
 
     /**
@@ -218,19 +219,20 @@ public class Proyecto extends javax.swing.JFrame {
 
     private void AgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgregarMouseClicked
         // TODO add your handling code here:
-        
+        usuarios.addUser();
+        Tabla.setModel(usuarios.toTableModel());
     }//GEN-LAST:event_AgregarMouseClicked
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF: " + ex);
-
+            
             try {
                 FlatLightLaf.setup();
             } catch (Exception ex2) {
