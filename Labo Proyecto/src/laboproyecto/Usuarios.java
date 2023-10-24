@@ -57,20 +57,20 @@ public class Usuarios {
         int id = last_id;
 
         String user_name = new String();
-        
-        char CaracteresEspeciales[] = {'¡', '#', '$', '&', '/', '?', '¿', '!','.','_'};
-        
-        user_name += ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
-        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
-        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
-        user_name += ThreadLocalRandom.current().nextInt('a', 'z' + 1);
-        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
-        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
-        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
-        user_name += CaracteresEspeciales[ThreadLocalRandom.current().nextInt(0, CaracteresEspeciales.length + 1)];
-        user_name += ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
 
-        double saldo = id;
+        char CaracteresEspeciales[] = {'¡', '#', '$', '&', '/', '?', '¿', '!', '.', '_'};
+
+        user_name += (char) ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += (char) CaracteresEspeciales[ThreadLocalRandom.current().nextInt(0, CaracteresEspeciales.length + 1)];
+        user_name += (char) ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+
+        double saldo = ThreadLocalRandom.current().nextInt(100, 800 + 1);;
 
         Usuario new_user = new Usuario(id, user_name, saldo);
         boolean add = usuarios.add(new_user);
@@ -82,10 +82,13 @@ public class Usuarios {
         int len = usuarios.size();
         for (int user = 0; user < len; user++) {
             if (usuarios.get(user).id == id) {
-                usuarios.remove(user);
+                Usuario deleted = usuarios.remove(user);
+
+                // TODO! Donar el 10% del saldo al usuario mas bajo.
                 return true;
             }
         }
+
         return false;
     }
 

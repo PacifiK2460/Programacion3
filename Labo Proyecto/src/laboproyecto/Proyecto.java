@@ -7,13 +7,14 @@ package laboproyecto;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
-
+    
     Usuarios usuarios = new Usuarios();
 
     /**
@@ -55,6 +56,11 @@ public class Proyecto extends javax.swing.JFrame {
         });
 
         Eliminar.setText("Eliminar");
+        Eliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EliminarMouseClicked(evt);
+            }
+        });
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -192,7 +198,7 @@ public class Proyecto extends javax.swing.JFrame {
         // TODO add your handling code here:
         UsuariosFrame.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_UsuariosMouseClicked
 
     private void RegresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegresarMouseClicked
@@ -222,6 +228,20 @@ public class Proyecto extends javax.swing.JFrame {
         usuarios.addUser();
         Tabla.setModel(usuarios.toTableModel());
     }//GEN-LAST:event_AgregarMouseClicked
+
+    private void EliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EliminarMouseClicked
+        // TODO add your handling code here:
+        if (Id.getText().isBlank() || Id.getText().isEmpty()) {
+            return;
+        }
+        
+        int id = Integer.parseInt(Id.getText());
+        if (!usuarios.deleteUser(id)) {
+            JOptionPane.showMessageDialog(rootPane, "El usuario no existe.");
+        }
+        
+        Tabla.setModel(usuarios.toTableModel());
+    }//GEN-LAST:event_EliminarMouseClicked
 
     /**
      * @param args the command line arguments
