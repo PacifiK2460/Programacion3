@@ -13,13 +13,15 @@ import java.util.stream.Collectors;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author 177685
  */
-public class Usuarios {
+public class Usuarios{
 
     // Keep track of ids
     private static int last_id;
@@ -111,7 +113,6 @@ public class Usuarios {
         }
 
         Usuario usuario_a_eliminar = _usuario_a_eliminar.get();
-        int index_usuario_a_eliminar = usuarios.indexOf(usuario_a_eliminar);
         Usuario usuario_con_menor_saldo = _usuario_con_menor_saldo.get();
         int index_usuario_con_menor_saldo = usuarios.indexOf(usuario_con_menor_saldo);
 
@@ -121,6 +122,14 @@ public class Usuarios {
         return usuarios.remove(usuario_a_eliminar);
     }
 
+    public Usuario getUser(int index){
+        return usuarios.get(index);
+    }
+    
+    public boolean isEmpty(){
+        return usuarios.isEmpty();
+    }
+    
     public TableModel toTableModel() {
         // Create a 2D array to hold the data
         Object[][] data = new Object[usuarios.size()][3];
@@ -152,4 +161,9 @@ public class Usuarios {
         return tableModel;
     }
 
+    public ComboBoxModel toComboBoxModel() {
+        Object[] UserNames = usuarios.stream().map(Usuario::getUserName).collect(Collectors.toList()).toArray();
+        ComboBoxModel comboBoxModel = new DefaultComboBoxModel(UserNames);
+        return comboBoxModel;
+    }
 }

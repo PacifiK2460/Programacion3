@@ -41,15 +41,38 @@ public class Proyecto extends javax.swing.JFrame {
         Regresar = new javax.swing.JButton();
         Id = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
+        Seleccionador = new javax.swing.JFrame();
+        SeleccionarJugadorLabel = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        SeleccionarJugadorComboBox = new javax.swing.JComboBox<>();
+        SeleccionarJugadorBoton = new javax.swing.JButton();
         Juego = new javax.swing.JFrame();
+        TituloDeLaVentana = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        TituloDeLaPregunta = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        Respuesta1 = new javax.swing.JButton();
+        Respuesta2 = new javax.swing.JButton();
+        Respuesta3 = new javax.swing.JButton();
+        Respuesta4 = new javax.swing.JButton();
+        Responder = new javax.swing.JButton();
+        SiguientePregunta = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JSeparator();
         Usuarios = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
         Jugar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
 
-        UsuariosFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        UsuariosFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         UsuariosFrame.setTitle("Usuarios");
         UsuariosFrame.setMinimumSize(new java.awt.Dimension(549, 345));
+        UsuariosFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                UsuariosFrameWindowClosing(evt);
+            }
+        });
 
         Agregar.setText("Agregar");
         Agregar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -149,15 +172,151 @@ public class Proyecto extends javax.swing.JFrame {
 
         Id.getAccessibleContext().setAccessibleName("Introduce el ID");
 
+        Seleccionador.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Seleccionador.setTitle("Selecciona tu Usuario");
+        Seleccionador.setMinimumSize(new java.awt.Dimension(500, 120));
+        Seleccionador.setPreferredSize(new java.awt.Dimension(500, 120));
+        Seleccionador.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                SeleccionadorWindowClosing(evt);
+            }
+        });
+
+        SeleccionarJugadorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        SeleccionarJugadorLabel.setText("Selecciona el usuario con el que quieres jugar");
+
+        SeleccionarJugadorBoton.setText("Seleccionar");
+
+        javax.swing.GroupLayout SeleccionadorLayout = new javax.swing.GroupLayout(Seleccionador.getContentPane());
+        Seleccionador.getContentPane().setLayout(SeleccionadorLayout);
+        SeleccionadorLayout.setHorizontalGroup(
+            SeleccionadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeleccionadorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(SeleccionadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SeleccionarJugadorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator3)
+                    .addGroup(SeleccionadorLayout.createSequentialGroup()
+                        .addComponent(SeleccionarJugadorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(SeleccionarJugadorBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        SeleccionadorLayout.setVerticalGroup(
+            SeleccionadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeleccionadorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SeleccionarJugadorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(SeleccionadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SeleccionarJugadorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SeleccionarJugadorBoton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        Juego.setTitle("Juego de Preguntas y Respuestas");
+
+        TituloDeLaVentana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TituloDeLaVentana.setText("Juego de Preguntas y Respuestas");
+
+        TituloDeLaPregunta.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        TituloDeLaPregunta.setText("<Titulo>");
+
+        jLabel1.setText("Usuario: <Nombre de Usuario>");
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Saldo: $<Saldo>");
+
+        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        Respuesta1.setText("<Respuesta 1>");
+
+        Respuesta2.setText("<Respuesta 2>");
+
+        Respuesta3.setText("<Respuesta 3>");
+
+        Respuesta4.setText("<Respuesta 4>");
+
+        Responder.setText("Responder");
+
+        SiguientePregunta.setText("Siguiente Pregunta");
+
         javax.swing.GroupLayout JuegoLayout = new javax.swing.GroupLayout(Juego.getContentPane());
         Juego.getContentPane().setLayout(JuegoLayout);
         JuegoLayout.setHorizontalGroup(
             JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(JuegoLayout.createSequentialGroup()
+                .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TituloDeLaVentana, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator4)))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(TituloDeLaPregunta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Respuesta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Respuesta2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Respuesta3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Respuesta4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Responder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JuegoLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SiguientePregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JuegoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator6)))
+                .addContainerGap())
         );
         JuegoLayout.setVerticalGroup(
             JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(JuegoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TituloDeLaVentana)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel2))
+                    .addComponent(jSeparator5))
+                .addGap(18, 18, 18)
+                .addComponent(TituloDeLaPregunta)
+                .addGap(18, 18, 18)
+                .addComponent(Respuesta1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Respuesta2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Respuesta3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Respuesta4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Responder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(SiguientePregunta)
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -271,8 +430,31 @@ public class Proyecto extends javax.swing.JFrame {
     }//GEN-LAST:event_EliminarMouseClicked
 
     private void JugarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JugarMouseClicked
-        // TODO add your handling code here:
+        // TODO add your handling code here:}
+        if (usuarios.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Sin usuarios por seleccionar");
+            return;
+        }
+        
+        this.setVisible(false);
+        
+        SeleccionarJugadorComboBox.setModel(usuarios.toComboBoxModel());
+        SeleccionarJugadorComboBox.setSelectedIndex(0);
+        
+        Seleccionador.setVisible(true);
     }//GEN-LAST:event_JugarMouseClicked
+
+    private void SeleccionadorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_SeleccionadorWindowClosing
+        // TODO add your handling code here:
+        this.setVisible(true);
+        Seleccionador.setVisible(false);
+    }//GEN-LAST:event_SeleccionadorWindowClosing
+
+    private void UsuariosFrameWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_UsuariosFrameWindowClosing
+        // TODO add your handling code here:
+        this.setVisible((true));
+        UsuariosFrame.setVisible(false);
+    }//GEN-LAST:event_UsuariosFrameWindowClosing
 
     /**
      * @param args the command line arguments
@@ -329,12 +511,30 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JFrame Juego;
     private javax.swing.JButton Jugar;
     private javax.swing.JButton Regresar;
+    private javax.swing.JButton Responder;
+    private javax.swing.JButton Respuesta1;
+    private javax.swing.JButton Respuesta2;
+    private javax.swing.JButton Respuesta3;
+    private javax.swing.JButton Respuesta4;
     private javax.swing.JButton Salir;
+    private javax.swing.JFrame Seleccionador;
+    private javax.swing.JButton SeleccionarJugadorBoton;
+    private javax.swing.JComboBox<String> SeleccionarJugadorComboBox;
+    private javax.swing.JLabel SeleccionarJugadorLabel;
+    private javax.swing.JButton SiguientePregunta;
     private javax.swing.JTable Tabla;
     private javax.swing.JScrollPane TablaScroll;
+    private javax.swing.JLabel TituloDeLaPregunta;
+    private javax.swing.JLabel TituloDeLaVentana;
     private javax.swing.JButton Usuarios;
     private javax.swing.JFrame UsuariosFrame;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     // End of variables declaration//GEN-END:variables
 }
