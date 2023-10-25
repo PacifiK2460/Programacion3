@@ -6,6 +6,7 @@ package laboproyecto;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class Usuarios {
 
         private final int id;
         private final String user_name;
-        private final double saldo;
+        private double saldo;
 
         public Usuario(int id, String user_name, double saldo) {
             this.id = id;
@@ -95,11 +96,29 @@ public class Usuarios {
 
     public boolean deleteUser(int id) {
 
-        Optional<Usuario> usuario_a_eliminar = usuarios.stream()
+        Optional<Usuario> _usuario_a_eliminar = usuarios.stream()
                 .filter(usuario -> usuario.id == id)
                 .findFirst();
-        
-        if(usuario)
+
+        if (_usuario_a_eliminar.isEmpty()) {
+            return false;
+        }
+
+        Optional<Usuario> _usuario_con_menor_saldo = usuarios.stream().min(Comparator.comparing(Usuario::getSaldo));
+
+        if (_usuario_con_menor_saldo.isEmpty()) {
+            return false;
+        }
+
+        Usuario usuario_a_eliminar = _usuario_a_eliminar.get();
+        int index_usuario_a_eliminar = usuarios.indexOf(usuario_a_eliminar);
+        Usuario usuario_con_menor_saldo = _usuario_con_menor_saldo.get();
+        int index_usuario_con_menor_saldo = usuarios.indexOf(usuario_con_menor_saldo);
+
+        usuario_con_menor_saldo.saldo += usuario_a_eliminar.saldo * 0.1;
+
+        usuarios.set(index_usuario_con_menor_saldo, usuario_con_menor_saldo);
+        return usuarios.remove(usuario_a_eliminar);
     }
 
     public TableModel toTableModel() {

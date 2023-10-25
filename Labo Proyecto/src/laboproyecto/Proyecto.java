@@ -41,8 +41,11 @@ public class Proyecto extends javax.swing.JFrame {
         Regresar = new javax.swing.JButton();
         Id = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
+        Juego = new javax.swing.JFrame();
         Usuarios = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
+        Jugar = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
 
         UsuariosFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         UsuariosFrame.setTitle("Usuarios");
@@ -93,7 +96,7 @@ public class Proyecto extends javax.swing.JFrame {
         Id.setForeground(java.awt.Color.gray);
         Id.setText("Introduce el ID");
         Id.setToolTipText("Introduce el ID");
-        Id.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        Id.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Id.setName("Introduce el ID"); // NOI18N
         Id.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -146,6 +149,17 @@ public class Proyecto extends javax.swing.JFrame {
 
         Id.getAccessibleContext().setAccessibleName("Introduce el ID");
 
+        javax.swing.GroupLayout JuegoLayout = new javax.swing.GroupLayout(Juego.getContentPane());
+        Juego.getContentPane().setLayout(JuegoLayout);
+        JuegoLayout.setHorizontalGroup(
+            JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        JuegoLayout.setVerticalGroup(
+            JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inicio");
         setAlwaysOnTop(true);
@@ -165,15 +179,24 @@ public class Proyecto extends javax.swing.JFrame {
             }
         });
 
+        Jugar.setText("JUGAR");
+        Jugar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JugarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                    .addComponent(Salir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2)
+                    .addComponent(Usuarios, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                    .addComponent(Salir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Jugar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -181,6 +204,10 @@ public class Proyecto extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Usuarios)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Jugar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Salir)
                 .addContainerGap())
@@ -237,11 +264,15 @@ public class Proyecto extends javax.swing.JFrame {
         
         int id = Integer.parseInt(Id.getText());
         if (!usuarios.deleteUser(id)) {
-            JOptionPane.showMessageDialog(rootPane, "El usuario no existe.");
+            JOptionPane.showMessageDialog(rootPane, "El usuario no existe o sucedió un error no-fatal.");
         }
         
         Tabla.setModel(usuarios.toTableModel());
     }//GEN-LAST:event_EliminarMouseClicked
+
+    private void JugarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JugarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JugarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -295,6 +326,8 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton Agregar;
     private javax.swing.JButton Eliminar;
     private javax.swing.JTextField Id;
+    private javax.swing.JFrame Juego;
+    private javax.swing.JButton Jugar;
     private javax.swing.JButton Regresar;
     private javax.swing.JButton Salir;
     private javax.swing.JTable Tabla;
@@ -302,5 +335,6 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton Usuarios;
     private javax.swing.JFrame UsuariosFrame;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }
