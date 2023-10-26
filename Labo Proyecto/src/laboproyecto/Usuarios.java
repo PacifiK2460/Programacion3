@@ -21,12 +21,12 @@ import javax.swing.JOptionPane;
  *
  * @author 177685
  */
-public class Usuarios{
+public class Usuarios {
 
     // Keep track of ids
     private static int last_id;
 
-    private class Usuario implements Comparable<Usuario> {
+    public class Usuario {
 
         private final int id;
         private final String user_name;
@@ -49,18 +49,6 @@ public class Usuarios{
         public double getSaldo() {
             return saldo;
         }
-
-        @Override
-        public int compareTo(Usuario t) {
-            if (this.saldo < t.saldo) {
-                return -1;
-            } else if (this.saldo == t.saldo) {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
-
     }
 
     private static ArrayList<Usuario> usuarios;
@@ -122,14 +110,14 @@ public class Usuarios{
         return usuarios.remove(usuario_a_eliminar);
     }
 
-    public Usuario getUser(int index){
+    public Usuario getUser(int index) {
         return usuarios.get(index);
     }
-    
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return usuarios.isEmpty();
     }
-    
+
     public TableModel toTableModel() {
         // Create a 2D array to hold the data
         Object[][] data = new Object[usuarios.size()][3];

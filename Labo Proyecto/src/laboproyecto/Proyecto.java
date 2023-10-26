@@ -186,6 +186,11 @@ public class Proyecto extends javax.swing.JFrame {
         SeleccionarJugadorLabel.setText("Selecciona el usuario con el que quieres jugar");
 
         SeleccionarJugadorBoton.setText("Seleccionar");
+        SeleccionarJugadorBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SeleccionarJugadorBotonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout SeleccionadorLayout = new javax.swing.GroupLayout(Seleccionador.getContentPane());
         Seleccionador.getContentPane().setLayout(SeleccionadorLayout);
@@ -455,6 +460,15 @@ public class Proyecto extends javax.swing.JFrame {
         this.setVisible((true));
         UsuariosFrame.setVisible(false);
     }//GEN-LAST:event_UsuariosFrameWindowClosing
+
+    private void SeleccionarJugadorBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeleccionarJugadorBotonMouseClicked
+        // TODO add your handling code here:
+        Seleccionador.setVisible(false);
+        
+        
+        
+        Juego.setVisible(true);
+    }//GEN-LAST:event_SeleccionarJugadorBotonMouseClicked
 
     /**
      * @param args the command line arguments

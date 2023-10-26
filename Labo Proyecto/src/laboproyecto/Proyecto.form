@@ -201,6 +201,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Seleccionar"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SeleccionarJugadorBotonMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
