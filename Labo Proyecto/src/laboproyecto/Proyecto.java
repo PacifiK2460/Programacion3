@@ -14,8 +14,9 @@ import javax.swing.JOptionPane;
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
-    
-    Usuarios usuarios = new Usuarios();
+
+    Usuarios usuarios;
+    Usuario usuario_seleccionado;
 
     /**
      * Creates new form Proyecto
@@ -50,8 +51,8 @@ public class Proyecto extends javax.swing.JFrame {
         TituloDeLaVentana = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         TituloDeLaPregunta = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        JugadorLabel = new javax.swing.JLabel();
+        SaldoLabel = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         Respuesta1 = new javax.swing.JButton();
         Respuesta2 = new javax.swing.JButton();
@@ -175,7 +176,6 @@ public class Proyecto extends javax.swing.JFrame {
         Seleccionador.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Seleccionador.setTitle("Selecciona tu Usuario");
         Seleccionador.setMinimumSize(new java.awt.Dimension(500, 120));
-        Seleccionador.setPreferredSize(new java.awt.Dimension(500, 120));
         Seleccionador.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 SeleccionadorWindowClosing(evt);
@@ -229,10 +229,10 @@ public class Proyecto extends javax.swing.JFrame {
         TituloDeLaPregunta.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         TituloDeLaPregunta.setText("<Titulo>");
 
-        jLabel1.setText("Usuario: <Nombre de Usuario>");
+        JugadorLabel.setText("Usuario: <Nombre de Usuario>");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Saldo: $<Saldo>");
+        SaldoLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        SaldoLabel.setText("Saldo: $<Saldo>");
 
         jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -264,11 +264,11 @@ public class Proyecto extends javax.swing.JFrame {
                         .addComponent(TituloDeLaPregunta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(JuegoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JugadorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                        .addComponent(SaldoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
                     .addGroup(JuegoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(Respuesta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -302,8 +302,8 @@ public class Proyecto extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2))
+                        .addComponent(JugadorLabel)
+                        .addComponent(SaldoLabel))
                     .addComponent(jSeparator5))
                 .addGap(18, 18, 18)
                 .addComponent(TituloDeLaPregunta)
@@ -425,12 +425,12 @@ public class Proyecto extends javax.swing.JFrame {
         if (Id.getText().isBlank() || Id.getText().isEmpty()) {
             return;
         }
-        
+
         int id = Integer.parseInt(Id.getText());
         if (!usuarios.deleteUser(id)) {
             JOptionPane.showMessageDialog(rootPane, "El usuario no existe o sucedió un error no-fatal.");
         }
-        
+
         Tabla.setModel(usuarios.toTableModel());
     }//GEN-LAST:event_EliminarMouseClicked
 
@@ -440,12 +440,12 @@ public class Proyecto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Sin usuarios por seleccionar");
             return;
         }
-        
+
         this.setVisible(false);
-        
+
         SeleccionarJugadorComboBox.setModel(usuarios.toComboBoxModel());
         SeleccionarJugadorComboBox.setSelectedIndex(0);
-        
+
         Seleccionador.setVisible(true);
     }//GEN-LAST:event_JugarMouseClicked
 
@@ -461,12 +461,20 @@ public class Proyecto extends javax.swing.JFrame {
         UsuariosFrame.setVisible(false);
     }//GEN-LAST:event_UsuariosFrameWindowClosing
 
+    private void setPreguntaIntoForm() {
+        JugadorLabel.setText("Usuario: " + usuario_seleccionado.getUserName());
+        SaldoLabel.setText("Saldo: $" + usuario_seleccionado.getSaldo());
+        
+    }
+
     private void SeleccionarJugadorBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeleccionarJugadorBotonMouseClicked
         // TODO add your handling code here:
         Seleccionador.setVisible(false);
-        
-        
-        
+
+        // Start Game
+        usuario_seleccionado = (Usuario) SeleccionarJugadorComboBox.getSelectedItem();
+        setPreguntaIntoForm();
+
         Juego.setVisible(true);
     }//GEN-LAST:event_SeleccionarJugadorBotonMouseClicked
 
@@ -474,12 +482,12 @@ public class Proyecto extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF: " + ex);
-            
+
             try {
                 FlatLightLaf.setup();
             } catch (Exception ex2) {
@@ -523,6 +531,7 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton Eliminar;
     private javax.swing.JTextField Id;
     private javax.swing.JFrame Juego;
+    private javax.swing.JLabel JugadorLabel;
     private javax.swing.JButton Jugar;
     private javax.swing.JButton Regresar;
     private javax.swing.JButton Responder;
@@ -530,6 +539,7 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton Respuesta2;
     private javax.swing.JButton Respuesta3;
     private javax.swing.JButton Respuesta4;
+    private javax.swing.JLabel SaldoLabel;
     private javax.swing.JButton Salir;
     private javax.swing.JFrame Seleccionador;
     private javax.swing.JButton SeleccionarJugadorBoton;
@@ -542,8 +552,6 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JLabel TituloDeLaVentana;
     private javax.swing.JButton Usuarios;
     private javax.swing.JFrame UsuariosFrame;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

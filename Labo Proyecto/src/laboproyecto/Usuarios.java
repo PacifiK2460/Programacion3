@@ -1,21 +1,13 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package laboproyecto;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,39 +16,10 @@ import javax.swing.JOptionPane;
 public class Usuarios {
 
     // Keep track of ids
-    private static int last_id;
+    private static int last_id = 99;
+    private static int preguntas_respondidas = 0;
 
-    public class Usuario {
-
-        private final int id;
-        private final String user_name;
-        private double saldo;
-
-        public Usuario(int id, String user_name, double saldo) {
-            this.id = id;
-            this.user_name = user_name;
-            this.saldo = saldo;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getUserName() {
-            return user_name;
-        }
-
-        public double getSaldo() {
-            return saldo;
-        }
-    }
-
-    private static ArrayList<Usuario> usuarios;
-
-    public Usuarios() {
-        Usuarios.last_id = 99;
-        usuarios = new ArrayList<>();
-    }
+    private static ArrayList<Usuario> usuarios = new ArrayList<>();
 
     public boolean addUser() {
         last_id += 1;
@@ -76,7 +39,7 @@ public class Usuarios {
         user_name += (char) CaracteresEspeciales[ThreadLocalRandom.current().nextInt(0, CaracteresEspeciales.length + 1)];
         user_name += (char) ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
 
-        double saldo = ThreadLocalRandom.current().nextInt(100, 800 + 1);;
+        double saldo = ThreadLocalRandom.current().nextInt(100, 800 + 1);
 
         Usuario new_user = new Usuario(id, user_name, saldo);
         boolean add = usuarios.add(new_user);
@@ -104,7 +67,7 @@ public class Usuarios {
         Usuario usuario_con_menor_saldo = _usuario_con_menor_saldo.get();
         int index_usuario_con_menor_saldo = usuarios.indexOf(usuario_con_menor_saldo);
 
-        usuario_con_menor_saldo.saldo += usuario_a_eliminar.saldo * 0.1;
+        usuario_con_menor_saldo.setSaldo(usuario_con_menor_saldo.getSaldo() + ( usuario_a_eliminar.getSaldo() * 0.1));
 
         usuarios.set(index_usuario_con_menor_saldo, usuario_con_menor_saldo);
         return usuarios.remove(usuario_a_eliminar);
@@ -154,4 +117,5 @@ public class Usuarios {
         ComboBoxModel comboBoxModel = new DefaultComboBoxModel(UserNames);
         return comboBoxModel;
     }
+
 }
