@@ -4,6 +4,7 @@
  */
 package laboproyecto;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -16,10 +17,11 @@ public class Preguntas {
     
     private static int last_id = 99;
 
-    private static ArrayList<Pregunta> preguntas;
+    private static ArrayList<Pregunta> preguntas = new ArrayList<>();
 
-    public boolean addPregunta(String Pregunta, int index_respuesta_correcta, String... opciones) {
-        return true;
+    public boolean addPregunta(String Pregunta, int index_respuesta_correcta, ArrayList<String> opciones) {
+        Pregunta nueva = new Pregunta(Pregunta, opciones, index_respuesta_correcta);
+        return preguntas.add(nueva);
     }
 
     public Pregunta getPregunta() {

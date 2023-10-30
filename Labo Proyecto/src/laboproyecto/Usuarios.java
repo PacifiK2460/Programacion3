@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -50,7 +54,7 @@ public class Usuarios {
     public boolean deleteUser(int id) {
 
         Optional<Usuario> _usuario_a_eliminar = usuarios.stream()
-                .filter(usuario -> usuario.id == id)
+                .filter(usuario -> usuario.getId() == id)
                 .findFirst();
 
         if (_usuario_a_eliminar.isEmpty()) {
@@ -88,9 +92,9 @@ public class Usuarios {
         // Fill the array with data from the ArrayList
         for (int i = 0; i < usuarios.size(); i++) {
             Usuario user = usuarios.get(i);
-            data[i][0] = user.id;
-            data[i][1] = user.user_name;
-            data[i][2] = user.saldo;
+            data[i][0] = user.getId();
+            data[i][1] = user.getUserName();
+            data[i][2] = user.getSaldo();
         }
 
         // Create the TableModel

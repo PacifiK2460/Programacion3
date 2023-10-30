@@ -7,6 +7,8 @@ package laboproyecto;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,8 +17,11 @@ import javax.swing.JOptionPane;
  */
 public class Proyecto extends javax.swing.JFrame {
 
-    Usuarios usuarios;
+    Usuarios usuarios = new Usuarios();
     Usuario usuario_seleccionado;
+    int opcion_seleccionada;
+
+    Preguntas preguntas = new Preguntas();
 
     /**
      * Creates new form Proyecto
@@ -237,14 +242,39 @@ public class Proyecto extends javax.swing.JFrame {
         jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         Respuesta1.setText("<Respuesta 1>");
+        Respuesta1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta1MouseClicked(evt);
+            }
+        });
 
         Respuesta2.setText("<Respuesta 2>");
+        Respuesta2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta2MouseClicked(evt);
+            }
+        });
 
         Respuesta3.setText("<Respuesta 3>");
+        Respuesta3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta3MouseClicked(evt);
+            }
+        });
 
         Respuesta4.setText("<Respuesta 4>");
+        Respuesta4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta4MouseClicked(evt);
+            }
+        });
 
         Responder.setText("Responder");
+        Responder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ResponderMouseClicked(evt);
+            }
+        });
 
         SiguientePregunta.setText("Siguiente Pregunta");
 
@@ -464,7 +494,15 @@ public class Proyecto extends javax.swing.JFrame {
     private void setPreguntaIntoForm() {
         JugadorLabel.setText("Usuario: " + usuario_seleccionado.getUserName());
         SaldoLabel.setText("Saldo: $" + usuario_seleccionado.getSaldo());
-        
+
+        Pregunta pregunta_actual = preguntas.getPregunta();
+
+        TituloDeLaPregunta.setText(pregunta_actual.getPregunta());
+        Respuesta1.setText(pregunta_actual.getOpciones().get(0));
+        Respuesta2.setText(pregunta_actual.getOpciones().get(1));
+        Respuesta3.setText(pregunta_actual.getOpciones().get(2));
+        Respuesta4.setText(pregunta_actual.getOpciones().get(3));
+
     }
 
     private void SeleccionarJugadorBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeleccionarJugadorBotonMouseClicked
@@ -472,11 +510,44 @@ public class Proyecto extends javax.swing.JFrame {
         Seleccionador.setVisible(false);
 
         // Start Game
-        usuario_seleccionado = (Usuario) SeleccionarJugadorComboBox.getSelectedItem();
+        usuario_seleccionado = usuarios.getUser(SeleccionarJugadorComboBox.getSelectedIndex());
+
+        // Add preguntas
+        for (int i = 0; i < 20; i++) {
+            preguntas.addPregunta("Pregunta " + i, 0, new ArrayList<String>(List.of("O1", "O2", "O3", "O4")));
+        }
+
         setPreguntaIntoForm();
 
         Juego.setVisible(true);
     }//GEN-LAST:event_SeleccionarJugadorBotonMouseClicked
+
+    private void ResponderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResponderMouseClicked
+        // TODO add your handling code here:
+
+        // Checar pregunta
+    }//GEN-LAST:event_ResponderMouseClicked
+
+    private void Respuesta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta1MouseClicked
+        // TODO add your handling code here:
+        opcion_seleccionada = 0;
+    }//GEN-LAST:event_Respuesta1MouseClicked
+
+    private void Respuesta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta2MouseClicked
+        // TODO add your handling code here:
+        opcion_seleccionada = 1;
+
+    }//GEN-LAST:event_Respuesta2MouseClicked
+
+    private void Respuesta3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta3MouseClicked
+        // TODO add your handling code here:
+        opcion_seleccionada = 2;
+    }//GEN-LAST:event_Respuesta3MouseClicked
+
+    private void Respuesta4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta4MouseClicked
+        // TODO add your handling code here:
+        opcion_seleccionada = 3;
+    }//GEN-LAST:event_Respuesta4MouseClicked
 
     /**
      * @param args the command line arguments
