@@ -339,26 +339,41 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;Respuesta 1&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Respuesta1MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Respuesta2">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;Respuesta 2&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Respuesta2MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Respuesta3">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;Respuesta 3&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Respuesta3MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Respuesta4">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;Respuesta 4&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Respuesta4MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Responder">
           <Properties>
             <Property name="text" type="java.lang.String" value="Responder"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ResponderMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="SiguientePregunta">
           <Properties>
