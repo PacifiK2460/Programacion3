@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.*;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,6 +33,9 @@ public class S13P03HilosInterfazGrafica extends JFrame {
     JButton iniciar2 = new JButton("Iniciar 2");
     JButton parar2 = new JButton("Detener 2");
 
+    PelotaHilo hilo1;
+    PelotaHilo hilo2;
+
     /**
      * @param args the command line arguments
      */
@@ -44,6 +49,56 @@ public class S13P03HilosInterfazGrafica extends JFrame {
     }
 
     private void crearGUI() {
+        parar1.setEnabled(false);
+        parar2.setEnabled(false);
+
+        iniciar1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!hilo1.isAlive()) {
+                    hilo1.start();
+                    iniciar1.setEnabled(false);
+                    parar1.setEnabled(true);
+
+                }
+            }
+        });
+        iniciar2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!hilo2.isAlive()) {
+                    hilo2.start();
+                    iniciar2.setEnabled(false);
+                    parar2.setEnabled(true);
+
+                }
+            }
+        });
+        parar1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (hilo1.isAlive()) {
+                    hilo1.detener();
+                    hilo1 = new PelotaHilo(panel1);
+                    iniciar1.setEnabled(true);
+                    parar1.setEnabled(false);
+
+                }
+            }
+        });
+        parar2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (hilo2.isAlive()) {
+                    hilo2.detener();
+                    hilo2 = new PelotaHilo(panel2);
+                    iniciar2.setEnabled(true);
+                    parar2.setEnabled(false);
+
+                }
+            }
+        });
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Container ventana = getContentPane();
         ventana.setLayout(new FlowLayout());
@@ -61,6 +116,8 @@ public class S13P03HilosInterfazGrafica extends JFrame {
         ventana.add(iniciar2);
         ventana.add(parar2);
 
+        hilo1 = new PelotaHilo(panel1);
+        hilo2 = new PelotaHilo(panel2);
     }
 
 }
