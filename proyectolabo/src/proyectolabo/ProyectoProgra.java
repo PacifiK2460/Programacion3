@@ -5,6 +5,7 @@
 package proyectolabo;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -21,6 +22,12 @@ public class ProyectoProgra extends javax.swing.JFrame {
 
     Usuarios usuarios = new Usuarios();
     int preguntasRespuestas = 0;
+    int respondido = 0;
+
+    Preguntas preguntas = new Preguntas();
+
+    Pregunta preguntaActual;
+    Usuario usuarioSeleccionado;
 
     /**
      * Creates new form ProyectoProgra
@@ -75,7 +82,7 @@ public class ProyectoProgra extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         SaldoDelUsuario = new javax.swing.JTextField();
         EstadoDeLaRespuesta = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        SiguientePregunta = new javax.swing.JButton();
         usuarioBoton = new javax.swing.JButton();
         salirBoton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -244,10 +251,25 @@ public class ProyectoProgra extends javax.swing.JFrame {
         ButtonD.setText("D");
 
         Respuesta1.setText("jTextField2");
+        Respuesta1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta1MouseClicked(evt);
+            }
+        });
 
         Respuesta2.setText("jTextField2");
+        Respuesta2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta2MouseClicked(evt);
+            }
+        });
 
         Respuesta3.setText("jTextField2");
+        Respuesta3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta3MouseClicked(evt);
+            }
+        });
         Respuesta3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Respuesta3ActionPerformed(evt);
@@ -255,6 +277,11 @@ public class ProyectoProgra extends javax.swing.JFrame {
         });
 
         Respuesta4.setText("jTextField2");
+        Respuesta4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Respuesta4MouseClicked(evt);
+            }
+        });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Usuario");
@@ -268,7 +295,12 @@ public class ProyectoProgra extends javax.swing.JFrame {
 
         EstadoDeLaRespuesta.setText("Respuesta: ");
 
-        jButton2.setText("Siguiente");
+        SiguientePregunta.setText("Siguiente");
+        SiguientePregunta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SiguientePreguntaMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout JuegoLayout = new javax.swing.GroupLayout(Juego.getContentPane());
         Juego.getContentPane().setLayout(JuegoLayout);
@@ -305,7 +337,7 @@ public class ProyectoProgra extends javax.swing.JFrame {
                     .addGroup(JuegoLayout.createSequentialGroup()
                         .addComponent(EstadoDeLaRespuesta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(SiguientePregunta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         JuegoLayout.setVerticalGroup(
             JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,7 +369,7 @@ public class ProyectoProgra extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(EstadoDeLaRespuesta, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(SiguientePregunta)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -531,23 +563,106 @@ public class ProyectoProgra extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_Respuesta3ActionPerformed
 
-    public void ponerPregunta(){
-        
+    public void ponerPregunta() {
+        Pregunta.setText(preguntaActual.titulo);
+        Respuesta1.setText(preguntaActual.opciones[0]);
+        Respuesta2.setText(preguntaActual.opciones[1]);
+        Respuesta3.setText(preguntaActual.opciones[2]);
+        Respuesta4.setText(preguntaActual.opciones[3]);
+        EstadoDeLaRespuesta.setText("Respuesta: ");
+
+        Respuesta1.setEnabled(true);
+        Respuesta2.setEnabled(true);
+        Respuesta3.setEnabled(true);
+        Respuesta4.setEnabled(true);
+        SiguientePregunta.setEnabled(false);
+
+        NombreDelUsuario.setText(usuarioSeleccionado.getUser_name());
+        SaldoDelUsuario.setText(String.valueOf(usuarioSeleccionado.getSaldo()));
     }
-    
+
+    public void checarPregunta() {
+        Respuesta1.setEnabled(false);
+        Respuesta2.setEnabled(false);
+        Respuesta3.setEnabled(false);
+        Respuesta4.setEnabled(false);
+
+        SiguientePregunta.setEnabled(true);
+        preguntasRespuestas += 1;
+
+        if (respondido == preguntaActual.opcion_correcta) {
+            usuarioSeleccionado.setSaldo(usuarioSeleccionado.getSaldo() + 50);
+            EstadoDeLaRespuesta.setText("Respuesta: CORRECTA");
+        } else {
+            usuarioSeleccionado.setSaldo(usuarioSeleccionado.getSaldo() - 60);
+            EstadoDeLaRespuesta.setText("Respuesta: INCORRECTA");
+
+        }
+
+    }
+
     private void SeleccionarJugadorButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeleccionarJugadorButtonMouseClicked
         // TODO add your handling code here:
-        
+
         // Usuario seleccionado
         String nombre_de_usuario_seleccionado = SeleccionarJugadorComboBox.getSelectedItem().toString();
         Usuario usuario_seleccionado = usuarios.get(nombre_de_usuario_seleccionado);
-        
+
         preguntasRespuestas = 0;
-        
-        
-        
-        
+        preguntas.setPreguntas();
+
+        Pregunta pregunta = preguntas.get(ThreadLocalRandom.current().nextInt(0, preguntas.size()) + 1);
+
+        usuarioSeleccionado = usuario_seleccionado;
+        preguntaActual = pregunta;
+
+        ponerPregunta();
+
+        seleccionarusuario.setVisible(false);
+        Juego.setVisible(true);
     }//GEN-LAST:event_SeleccionarJugadorButtonMouseClicked
+
+    private void Respuesta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta1MouseClicked
+        // TODO add your handling code here:
+        respondido = 0;
+        checarPregunta();
+    }//GEN-LAST:event_Respuesta1MouseClicked
+
+    private void Respuesta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta2MouseClicked
+        // TODO add your handling code here:
+        respondido = 1;
+        checarPregunta();
+
+    }//GEN-LAST:event_Respuesta2MouseClicked
+
+    private void Respuesta3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta3MouseClicked
+        // TODO add your handling code here:
+        respondido = 2;
+        checarPregunta();
+
+    }//GEN-LAST:event_Respuesta3MouseClicked
+
+    private void Respuesta4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta4MouseClicked
+        // TODO add your handling code here:
+        respondido = 3;
+        checarPregunta();
+
+    }//GEN-LAST:event_Respuesta4MouseClicked
+
+    private void SiguientePreguntaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SiguientePreguntaMouseClicked
+        // TODO add your handling code here:
+        if (preguntasRespuestas < 10) {
+            Pregunta pregunta = preguntas.get(ThreadLocalRandom.current().nextInt(0, preguntas.size()) + 1);
+            preguntaActual = pregunta;
+            ponerPregunta();
+        } else {
+            usuarios.replaceUser(usuarioSeleccionado.getId(), usuarioSeleccionado);
+            JOptionPane.showMessageDialog(rootPane, "JUEGO TERMINADO: " + usuarioSeleccionado.getUser_name() + ", terminaste con un saldo de: " + usuarioSeleccionado.getSaldo());
+
+            this.setVisible(true);
+            Juego.setVisible(false);
+        }
+    }//GEN-LAST:event_SiguientePreguntaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -601,6 +716,7 @@ public class ProyectoProgra extends javax.swing.JFrame {
     private javax.swing.JButton SeleccionarJugadorButton;
     private javax.swing.JComboBox<String> SeleccionarJugadorComboBox;
     private javax.swing.JSeparator SeleccionarJugadorSep;
+    private javax.swing.JButton SiguientePregunta;
     private javax.swing.JLabel Titulo;
     private javax.swing.JFrame VentanaRegistroDeUsuarios;
     private javax.swing.JButton botonNuevoUsuario;
@@ -609,7 +725,6 @@ public class ProyectoProgra extends javax.swing.JFrame {
     private javax.swing.JTextField idEliminar;
     private javax.swing.JLabel idLabel;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
