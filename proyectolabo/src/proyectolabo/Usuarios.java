@@ -46,6 +46,55 @@ public class Usuarios {
         usuarios.add(nuevo_usuario);
     }
 
+    public Usuario getById(int id) {
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == id) {
+                return usuarios.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Usuario get(String username) {
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getUser_name().equals(username)) {
+                return usuarios.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public void eliminarUsuario(int id) {
+        Usuario a_eliminar = getById(id);
+        if (a_eliminar == null) {
+            return;
+        }
+
+        usuarios.remove(a_eliminar);
+    }
+
+    public void replaceUser(int id, Usuario nuevo_usuario) {
+        int index = -1;
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == id) {
+                index  = i;
+                break;
+            }
+        }
+        
+        if(index == -1){
+            return;
+        }
+        
+        usuarios.set(index, nuevo_usuario);
+    }
+    
+    public void remove(Usuario a_eliminar){
+        usuarios.remove(a_eliminar);
+    }
+
     public int size() {
         return usuarios.size();
     }
