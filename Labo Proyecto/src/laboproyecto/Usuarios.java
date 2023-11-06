@@ -71,7 +71,7 @@ public class Usuarios {
         Usuario usuario_con_menor_saldo = _usuario_con_menor_saldo.get();
         int index_usuario_con_menor_saldo = usuarios.indexOf(usuario_con_menor_saldo);
 
-        usuario_con_menor_saldo.setSaldo(usuario_con_menor_saldo.getSaldo() + ( usuario_a_eliminar.getSaldo() * 0.1));
+        usuario_con_menor_saldo.setSaldo(usuario_con_menor_saldo.getSaldo() + (usuario_a_eliminar.getSaldo() * 0.1));
 
         usuarios.set(index_usuario_con_menor_saldo, usuario_con_menor_saldo);
         return usuarios.remove(usuario_a_eliminar);
@@ -120,6 +120,17 @@ public class Usuarios {
         Object[] UserNames = usuarios.stream().map(Usuario::getUserName).collect(Collectors.toList()).toArray();
         ComboBoxModel comboBoxModel = new DefaultComboBoxModel(UserNames);
         return comboBoxModel;
+    }
+
+    public void editUser(int id, Usuario nuevo_usuario) {
+        int index_de_usuario = -1;
+        Optional<Usuario> usuario_a_remplazar = usuarios.stream().filter(usuario -> usuario.getId() == id).findFirst();
+        if (usuario_a_remplazar.isEmpty()) {
+            return;
+        }
+
+        index_de_usuario = usuarios.indexOf(usuario_a_remplazar);
+        usuarios.set(index_de_usuario, nuevo_usuario);
     }
 
 }

@@ -249,11 +249,9 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="Respuesta4" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="Responder" max="32767" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="ResultadoDeLaPregunta" min="-2" pref="113" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="SiguientePregunta" min="-2" pref="169" max="-2" attributes="0"/>
                       </Group>
@@ -293,10 +291,11 @@
                   <Component id="Respuesta4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jSeparator6" min="-2" pref="10" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="Responder" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="SiguientePregunta" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="SiguientePregunta" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ResultadoDeLaPregunta" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -367,20 +366,17 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Respuesta4MouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="Responder">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Responder"/>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ResponderMouseClicked"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JButton" name="SiguientePregunta">
           <Properties>
             <Property name="text" type="java.lang.String" value="Siguiente Pregunta"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SiguientePreguntaMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator6">
+        </Component>
+        <Component class="javax.swing.JLabel" name="ResultadoDeLaPregunta">
         </Component>
       </SubComponents>
     </Container>
@@ -463,6 +459,7 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JugarMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JugarActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator2">

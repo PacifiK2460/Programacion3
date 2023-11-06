@@ -26,7 +26,7 @@ public class Preguntas {
 
     public Pregunta getPregunta() {
         this.preguntas_respondidas++;
-        return this.preguntas.get(ThreadLocalRandom.current().nextInt(0, preguntas.size() + 1));
+        return this.preguntas.get(ThreadLocalRandom.current().nextInt(0, preguntas.size()));
     }
 
     public int getPreguntasRespondidas() {

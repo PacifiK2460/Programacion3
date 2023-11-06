@@ -16,12 +16,13 @@ import javax.swing.JOptionPane;
  * @author 177685
  */
 public class Proyecto extends javax.swing.JFrame {
-
+    
     Usuarios usuarios = new Usuarios();
     Usuario usuario_seleccionado;
     int opcion_seleccionada;
-
+    
     Preguntas preguntas = new Preguntas();
+    Pregunta pregunta_seleccionada;
 
     /**
      * Creates new form Proyecto
@@ -63,9 +64,9 @@ public class Proyecto extends javax.swing.JFrame {
         Respuesta2 = new javax.swing.JButton();
         Respuesta3 = new javax.swing.JButton();
         Respuesta4 = new javax.swing.JButton();
-        Responder = new javax.swing.JButton();
         SiguientePregunta = new javax.swing.JButton();
         jSeparator6 = new javax.swing.JSeparator();
+        ResultadoDeLaPregunta = new javax.swing.JLabel();
         Usuarios = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
         Jugar = new javax.swing.JButton();
@@ -269,14 +270,12 @@ public class Proyecto extends javax.swing.JFrame {
             }
         });
 
-        Responder.setText("Responder");
-        Responder.addMouseListener(new java.awt.event.MouseAdapter() {
+        SiguientePregunta.setText("Siguiente Pregunta");
+        SiguientePregunta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ResponderMouseClicked(evt);
+                SiguientePreguntaMouseClicked(evt);
             }
         });
-
-        SiguientePregunta.setText("Siguiente Pregunta");
 
         javax.swing.GroupLayout JuegoLayout = new javax.swing.GroupLayout(Juego.getContentPane());
         Juego.getContentPane().setLayout(JuegoLayout);
@@ -311,11 +310,10 @@ public class Proyecto extends javax.swing.JFrame {
                     .addGroup(JuegoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(Respuesta4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(JuegoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Responder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JuegoLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(ResultadoDeLaPregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(SiguientePregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(JuegoLayout.createSequentialGroup()
                         .addContainerGap()
@@ -347,10 +345,10 @@ public class Proyecto extends javax.swing.JFrame {
                 .addComponent(Respuesta4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Responder)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(SiguientePregunta)
+                .addGroup(JuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SiguientePregunta)
+                    .addComponent(ResultadoDeLaPregunta))
                 .addContainerGap())
         );
 
@@ -377,6 +375,11 @@ public class Proyecto extends javax.swing.JFrame {
         Jugar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JugarMouseClicked(evt);
+            }
+        });
+        Jugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JugarActionPerformed(evt);
             }
         });
 
@@ -455,12 +458,12 @@ public class Proyecto extends javax.swing.JFrame {
         if (Id.getText().isBlank() || Id.getText().isEmpty()) {
             return;
         }
-
+        
         int id = Integer.parseInt(Id.getText());
         if (!usuarios.deleteUser(id)) {
             JOptionPane.showMessageDialog(rootPane, "El usuario no existe o sucedió un error no-fatal.");
         }
-
+        
         Tabla.setModel(usuarios.toTableModel());
     }//GEN-LAST:event_EliminarMouseClicked
 
@@ -470,12 +473,12 @@ public class Proyecto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Sin usuarios por seleccionar");
             return;
         }
-
+        
         this.setVisible(false);
-
+        
         SeleccionarJugadorComboBox.setModel(usuarios.toComboBoxModel());
         SeleccionarJugadorComboBox.setSelectedIndex(0);
-
+        
         Seleccionador.setVisible(true);
     }//GEN-LAST:event_JugarMouseClicked
 
@@ -490,19 +493,43 @@ public class Proyecto extends javax.swing.JFrame {
         this.setVisible((true));
         UsuariosFrame.setVisible(false);
     }//GEN-LAST:event_UsuariosFrameWindowClosing
-
+    
     private void setPreguntaIntoForm() {
         JugadorLabel.setText("Usuario: " + usuario_seleccionado.getUserName());
         SaldoLabel.setText("Saldo: $" + usuario_seleccionado.getSaldo());
-
+        
         Pregunta pregunta_actual = preguntas.getPregunta();
-
+        pregunta_seleccionada = pregunta_actual;
+        
         TituloDeLaPregunta.setText(pregunta_actual.getPregunta());
         Respuesta1.setText(pregunta_actual.getOpciones().get(0));
         Respuesta2.setText(pregunta_actual.getOpciones().get(1));
         Respuesta3.setText(pregunta_actual.getOpciones().get(2));
         Respuesta4.setText(pregunta_actual.getOpciones().get(3));
-
+        
+        Respuesta1.setEnabled(true);
+        Respuesta2.setEnabled(true);
+        Respuesta3.setEnabled(true);
+        Respuesta4.setEnabled(true);
+        
+        SiguientePregunta.setEnabled(false);
+        ResultadoDeLaPregunta.setText("");
+    }
+    
+    public void checar() {
+        if (opcion_seleccionada == pregunta_seleccionada.getIndexRespuestaCorrecta()) {
+            usuario_seleccionado.setSaldo(usuario_seleccionado.getSaldo() + 50.0);
+            ResultadoDeLaPregunta.setText("Correcto");
+        } else {
+            usuario_seleccionado.setSaldo(usuario_seleccionado.getSaldo() - 60.0);
+            ResultadoDeLaPregunta.setText("Incorrecto");
+        }
+        
+        Respuesta1.setEnabled(false);
+        Respuesta2.setEnabled(false);
+        Respuesta3.setEnabled(false);
+        Respuesta4.setEnabled(false);
+        SiguientePregunta.setEnabled(true);
     }
 
     private void SeleccionarJugadorBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeleccionarJugadorBotonMouseClicked
@@ -513,52 +540,92 @@ public class Proyecto extends javax.swing.JFrame {
         usuario_seleccionado = usuarios.getUser(SeleccionarJugadorComboBox.getSelectedIndex());
 
         // Add preguntas
-        for (int i = 0; i < 20; i++) {
-            preguntas.addPregunta("Pregunta " + i, 0, new ArrayList<String>(List.of("O1", "O2", "O3", "O4")));
-        }
-
+        preguntas.addPregunta("¿Cuál es la capital de México?", 0, new ArrayList<>(List.of("Ciudad de México", "Guadalajara", "Monterrey", "Cancún")));
+        preguntas.addPregunta("¿Cuál es el río más largo del mundo?", 1, new ArrayList<>(List.of("Río Amazonas", "Río Nilo", "Río Yangtsé", "Río Misisipi")));
+        preguntas.addPregunta("¿Quién escribió 'Cien años de soledad'?", 2, new ArrayList<>(List.of("Mario Vargas Llosa", "Isabel Allende", "Gabriel García Márquez", "Carlos Fuentes")));
+        preguntas.addPregunta("¿Cuál es el planeta más grande del sistema solar?", 3, new ArrayList<>(List.of("Marte", "Venus", "Tierra", "Júpiter")));
+        preguntas.addPregunta("¿Cuál es el animal terrestre más rápido?", 0, new ArrayList<>(List.of("Guepardo", "León", "Elefante", "Canguro")));
+        preguntas.addPregunta("¿Cuál es el océano más grande del mundo?", 1, new ArrayList<>(List.of("Océano Atlántico", "Océano Pacífico", "Océano Índico", "Océano Ártico")));
+        preguntas.addPregunta("¿Quién pintó 'La última cena'?", 2, new ArrayList<>(List.of("Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet")));
+        preguntas.addPregunta("¿Cuál es el país más poblado del mundo?", 3, new ArrayList<>(List.of("Estados Unidos", "India", "Brasil", "China")));
+        preguntas.addPregunta("¿Cuál es el ave voladora más grande del mundo?", 0, new ArrayList<>(List.of("Cóndor andino", "Águila real", "Flamenco", "Cisne")));
+        preguntas.addPregunta("¿Cuál es el continente más grande del mundo?", 1, new ArrayList<>(List.of("África", "Asia", "América", "Europa")));
+        preguntas.addPregunta("¿Quién es el autor de 'Don Quijote de la Mancha'?", 2, new ArrayList<>(List.of("Miguel de Unamuno", "Federico García Lorca", "Miguel de Cervantes", "Lope de Vega")));
+        preguntas.addPregunta("¿Cuál es el país con más idiomas hablados?", 3, new ArrayList<>(List.of("India", "China", "Estados Unidos", "Papúa Nueva Guinea")));
+        preguntas.addPregunta("¿Cuál es el mamífero más grande del mundo?", 0, new ArrayList<>(List.of("Ballena azul", "Elefante africano", "Oso polar", "Hipopótamo")));
+        preguntas.addPregunta("¿Cuál es la montaña más alta del mundo?", 1, new ArrayList<>(List.of("K2", "Monte Everest", "Kangchenjunga", "Lhotse")));
+        preguntas.addPregunta("¿Quién compuso la 'Novena Sinfonía'?", 2, new ArrayList<>(List.of("Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Ludwig van Beethoven", "Franz Schubert")));
+        preguntas.addPregunta("¿Cuál es el desierto más grande del mundo?", 3, new ArrayList<>(List.of("Desierto del Sahara", "Desierto de Atacama", "Desierto de Gobi", "Desierto de Antártida")));
+        preguntas.addPregunta("¿Cuál es el reptil más grande del mundo?", 0, new ArrayList<>(List.of("Cocodrilo del Nilo", "Cocodrilo de agua salada", "Anaconda verde", "Pitón reticulada")));
+        preguntas.addPregunta("¿Cuál es el lago más profundo del mundo?", 1, new ArrayList<>(List.of("Lago Superior", "Lago Tanganica", "Lago Baikal", "Lago Nyasa")));
+        preguntas.addPregunta("¿Quién escribió 'La Odisea'?", 2, new ArrayList<>(List.of("Sófocles", "Esquilo", "Homero", "Eurípides")));
+        preguntas.addPregunta("¿Cuál es el río más caudaloso del mundo?", 3, new ArrayList<>(List.of("Río Nilo", "Río Yangtsé", "Río Misisipi", "Río Amazonas")));
+        
         setPreguntaIntoForm();
-
+        
         Juego.setVisible(true);
     }//GEN-LAST:event_SeleccionarJugadorBotonMouseClicked
 
-    private void ResponderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResponderMouseClicked
-        // TODO add your handling code here:
-
-        // Checar pregunta
-    }//GEN-LAST:event_ResponderMouseClicked
-
     private void Respuesta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta1MouseClicked
         // TODO add your handling code here:
-        opcion_seleccionada = 0;
+        if (Respuesta1.isEnabled()) {
+            opcion_seleccionada = 0;
+            checar();
+        }
     }//GEN-LAST:event_Respuesta1MouseClicked
 
     private void Respuesta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta2MouseClicked
         // TODO add your handling code here:
-        opcion_seleccionada = 1;
-
+        if (Respuesta2.isEnabled()) {
+            opcion_seleccionada = 1;
+            checar();
+        }
     }//GEN-LAST:event_Respuesta2MouseClicked
 
     private void Respuesta3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta3MouseClicked
         // TODO add your handling code here:
-        opcion_seleccionada = 2;
+        if (Respuesta3.isEnabled()) {
+            opcion_seleccionada = 2;
+            checar();
+        }
     }//GEN-LAST:event_Respuesta3MouseClicked
 
     private void Respuesta4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta4MouseClicked
         // TODO add your handling code here:
-        opcion_seleccionada = 3;
+        if (Respuesta4.isEnabled()) {
+            opcion_seleccionada = 3;
+            checar();
+        }
     }//GEN-LAST:event_Respuesta4MouseClicked
+
+    private void JugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JugarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JugarActionPerformed
+
+    private void SiguientePreguntaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SiguientePreguntaMouseClicked
+        // TODO add your handling code here:
+        if (SiguientePregunta.isEnabled()) {
+            if (preguntas.getPreguntasRespondidas() < 10) {
+                setPreguntaIntoForm();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Juego Terminado");
+                usuarios.editUser(usuario_seleccionado.getId(), usuario_seleccionado);
+                this.setVisible(true);
+                Juego.setVisible(false);
+            }
+        }
+    }//GEN-LAST:event_SiguientePreguntaMouseClicked
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF: " + ex);
-
+            
             try {
                 FlatLightLaf.setup();
             } catch (Exception ex2) {
@@ -605,11 +672,11 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JLabel JugadorLabel;
     private javax.swing.JButton Jugar;
     private javax.swing.JButton Regresar;
-    private javax.swing.JButton Responder;
     private javax.swing.JButton Respuesta1;
     private javax.swing.JButton Respuesta2;
     private javax.swing.JButton Respuesta3;
     private javax.swing.JButton Respuesta4;
+    private javax.swing.JLabel ResultadoDeLaPregunta;
     private javax.swing.JLabel SaldoLabel;
     private javax.swing.JButton Salir;
     private javax.swing.JFrame Seleccionador;
