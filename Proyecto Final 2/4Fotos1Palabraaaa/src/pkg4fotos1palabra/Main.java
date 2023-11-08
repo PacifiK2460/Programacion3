@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package pkg4fotos1palabra;
+
 import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +14,13 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 public class Main extends JFrame {
+
     private JLabel imageLabel;
     private JTextField answerField;
     private JButton checkButton;
     private String[] palabras = {"texocotl", "conetl", "itzcuintli", "pitzahua"};
     private String[] imagenesPorPalabra = {
-        "texocotl.jpg", "conetl.jpg", "itzcuintli.jpg", "pitzahua.jpg",
-    };
+        "texocotl.jpg", "conetl.jpg", "itzcuintli.jpg", "pitzahua.jpg",};
     private int currentQuestion = 0;
     private int score = 0;
     private int attemptsRemaining = 5; // límite de intentos
@@ -73,20 +74,19 @@ public class Main extends JFrame {
                 }
             }
         });
-       // Cambiamos la inicialización de currentQuestion a un valor aleatorio.
+        // Cambiamos la inicialización de currentQuestion a un valor aleatorio.
         Random random = new Random();
         currentQuestion = random.nextInt(palabras.length);
 
         // Llamamos a loadQuestion para cargar la primera palabra aleatoria.
-        loadQuestion();  
-        
-        
+        loadQuestion();
+
     }
 
     private void loadQuestion() {
         String palabraActual = palabras[currentQuestion];
         String imagenPalabraActual = imagenesPorPalabra[currentQuestion];
-        
+
         // Cargar y mostrar la imagen correspondiente a la palabra actual en la interfaz de usuario.
         ImageIcon imageIcon = createImageIcon(imagenPalabraActual);
         if (imageIcon != null) {
@@ -94,7 +94,7 @@ public class Main extends JFrame {
         } else {
             imageLabel.setIcon(null); // Si no se encuentra la imagen, se muestra en blanco.
         }
-        
+
         // Restablecer otros elementos de la interfaz, como el campo de texto de respuesta.
         answerField.setText("");
         attemptsRemaining = 5; // Reiniciar los intentos restantes
@@ -133,5 +133,3 @@ public class Main extends JFrame {
         });
     }
 }
-
-

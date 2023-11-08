@@ -4,11 +4,20 @@
  */
 package proyecto;
 
+import Usuarios.TipoDeUsuario;
+import Usuarios.Usuario;
+import Usuarios.Usuarios;
+import Usuarios.UsuariosException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 177685
  */
 public class Inicio extends javax.swing.JFrame {
+    
+    Usuarios usuarios = new Usuarios();
+    Usuario usuario_seleccionado;
 
     /**
      * Creates new form Inicio
@@ -31,35 +40,63 @@ public class Inicio extends javax.swing.JFrame {
         NombreDeUsuarioTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         ContrasenaDelUsuarioTextField = new javax.swing.JPasswordField();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        IniciarSesionBoton = new javax.swing.JToggleButton();
         jSeparator1 = new javax.swing.JSeparator();
         Registrarse = new javax.swing.JFrame();
         jLabel4 = new javax.swing.JLabel();
         NombreDelNuevoDeUsuarioTextField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         ContrasenaDelNuevoUsuarioTextField = new javax.swing.JPasswordField();
-        jToggleButton2 = new javax.swing.JToggleButton();
+        RegistrarUsuarioBoton = new javax.swing.JToggleButton();
         jSeparator2 = new javax.swing.JSeparator();
-        MenuPrincipal = new javax.swing.JFrame();
+        TipoDeNuevoUsuarioComboBox = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        EditarPerfil = new javax.swing.JFrame();
+        GuardarEdicion = new javax.swing.JToggleButton();
+        jSeparator4 = new javax.swing.JSeparator();
+        EditarContrasenaTextField = new javax.swing.JPasswordField();
+        jLabel12 = new javax.swing.JLabel();
+        EditarNombdeDeUsuarioTextField = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        CancelarEdicion = new javax.swing.JButton();
+        EditarTipoDeUsuarioComboBox = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        MenuPrincipalUsuario = new javax.swing.JFrame();
         jLabel6 = new javax.swing.JLabel();
         NombreDeUsuarioLabel = new javax.swing.JLabel();
-        IniciarSopaDeLetrasButon = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        IdiomaComboBox = new javax.swing.JComboBox<>();
+        DificultadComboBox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         Iniciar4F1PBoton = new javax.swing.JButton();
-        IniciarSopaDeLetras = new javax.swing.JButton();
-        IniciarTrivia = new javax.swing.JButton();
-        AyudaBoton = new javax.swing.JButton();
+        IniciarSopaDeLetrasBoton = new javax.swing.JButton();
+        IniciarTablero = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel11 = new javax.swing.JLabel();
-        Ayuda = new javax.swing.JFrame();
+        IniciarTrivia = new javax.swing.JButton();
+        EditarPerfilBoton = new javax.swing.JButton();
+        MenuPrincipalAdministrador = new javax.swing.JFrame();
+        JuegoTableroAyuda = new javax.swing.JFrame();
+        JuegoTablero = new javax.swing.JFrame();
+        JuegoTrivia = new javax.swing.JFrame();
+        JuegoSopaDeLetras = new javax.swing.JFrame();
+        Juego4F1P = new javax.swing.JFrame();
+        jLabelImagen = new javax.swing.JLabel();
+        answerField = new javax.swing.JTextField();
+        checkButton = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        LenguaLabel = new javax.swing.JTextField();
+        DificultadLabel = new javax.swing.JTextField();
         LoginFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         IrARegistrarseBoton = new javax.swing.JButton();
         IrAIniciarSesionBoton = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+
+        IniciarSesion.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        IniciarSesion.setMinimumSize(new java.awt.Dimension(339, 330));
 
         jLabel2.setText("Nombre de Usuario");
 
@@ -70,14 +107,19 @@ public class Inicio extends javax.swing.JFrame {
 
         ContrasenaDelUsuarioTextField.setToolTipText("Contraseña del usuario");
 
-        jToggleButton1.setText("Iniciar Sesión");
-        jToggleButton1.setToolTipText("Haz click para iniciar sesión");
+        IniciarSesionBoton.setText("Iniciar Sesión");
+        IniciarSesionBoton.setToolTipText("Haz click para iniciar sesión");
+        IniciarSesionBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IniciarSesionBotonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout IniciarSesionLayout = new javax.swing.GroupLayout(IniciarSesion.getContentPane());
         IniciarSesion.getContentPane().setLayout(IniciarSesionLayout);
         IniciarSesionLayout.setHorizontalGroup(
             IniciarSesionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(IniciarSesionBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(IniciarSesionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(IniciarSesionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,9 +144,12 @@ public class Inicio extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jToggleButton1)
+                .addComponent(IniciarSesionBoton)
                 .addContainerGap())
         );
+
+        Registrarse.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Registrarse.setMinimumSize(new java.awt.Dimension(339, 330));
 
         jLabel4.setText("Nombre de Usuario");
 
@@ -115,14 +160,24 @@ public class Inicio extends javax.swing.JFrame {
 
         ContrasenaDelNuevoUsuarioTextField.setToolTipText("Contraseña del usuario");
 
-        jToggleButton2.setText("Registrar Usuario");
-        jToggleButton2.setToolTipText("Haz click para registrar usuario");
+        RegistrarUsuarioBoton.setText("Registrar Usuario");
+        RegistrarUsuarioBoton.setToolTipText("Haz click para registrar usuario");
+        RegistrarUsuarioBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RegistrarUsuarioBotonMouseClicked(evt);
+            }
+        });
+
+        TipoDeNuevoUsuarioComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jugador", "Administrador" }));
+
+        jLabel9.setText("Tipo de Usuario");
+        jLabel9.setToolTipText("");
 
         javax.swing.GroupLayout RegistrarseLayout = new javax.swing.GroupLayout(Registrarse.getContentPane());
         Registrarse.getContentPane().setLayout(RegistrarseLayout);
         RegistrarseLayout.setHorizontalGroup(
             RegistrarseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToggleButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(RegistrarUsuarioBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(RegistrarseLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(RegistrarseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,7 +185,9 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(NombreDelNuevoDeUsuarioTextField)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ContrasenaDelNuevoUsuarioTextField)
-                    .addComponent(jSeparator2))
+                    .addComponent(TipoDeNuevoUsuarioComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         RegistrarseLayout.setVerticalGroup(
@@ -144,15 +201,95 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ContrasenaDelNuevoUsuarioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TipoDeNuevoUsuarioComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jToggleButton2)
+                .addComponent(RegistrarUsuarioBoton)
                 .addContainerGap())
         );
 
-        MenuPrincipal.setBackground(new java.awt.Color(234, 217, 181));
-        MenuPrincipal.setResizable(false);
+        EditarPerfil.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        GuardarEdicion.setText("Guardar Cambios");
+        GuardarEdicion.setToolTipText("Haz click para iniciar sesión");
+        GuardarEdicion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GuardarEdicionMouseClicked(evt);
+            }
+        });
+
+        EditarContrasenaTextField.setToolTipText("Contraseña del usuario");
+
+        jLabel12.setText("Editar Contraseña");
+        jLabel12.setToolTipText("");
+
+        EditarNombdeDeUsuarioTextField.setToolTipText("NOmbre del usuario");
+
+        jLabel13.setText("Editar Nombre de Usuario");
+
+        CancelarEdicion.setText("Cancelar");
+        CancelarEdicion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CancelarEdicionMouseClicked(evt);
+            }
+        });
+
+        EditarTipoDeUsuarioComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jugador", "Administrador" }));
+
+        jLabel14.setText("Editar Tipo de Usuario");
+        jLabel14.setToolTipText("");
+
+        javax.swing.GroupLayout EditarPerfilLayout = new javax.swing.GroupLayout(EditarPerfil.getContentPane());
+        EditarPerfil.getContentPane().setLayout(EditarPerfilLayout);
+        EditarPerfilLayout.setHorizontalGroup(
+            EditarPerfilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EditarPerfilLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(EditarPerfilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(EditarNombdeDeUsuarioTextField)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(EditarContrasenaTextField)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EditarPerfilLayout.createSequentialGroup()
+                        .addComponent(CancelarEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(GuardarEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(EditarTipoDeUsuarioComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        EditarPerfilLayout.setVerticalGroup(
+            EditarPerfilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EditarPerfilLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EditarNombdeDeUsuarioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EditarContrasenaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel14)
+                .addGap(9, 9, 9)
+                .addComponent(EditarTipoDeUsuarioComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(EditarPerfilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(GuardarEdicion)
+                    .addComponent(CancelarEdicion))
+                .addContainerGap())
+        );
+
+        MenuPrincipalUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        MenuPrincipalUsuario.setBackground(new java.awt.Color(234, 217, 181));
+        MenuPrincipalUsuario.setMinimumSize(new java.awt.Dimension(339, 330));
 
         jLabel6.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 36)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -161,11 +298,9 @@ public class Inicio extends javax.swing.JFrame {
         NombreDeUsuarioLabel.setFont(new java.awt.Font("Franklin Gothic Book", 0, 14)); // NOI18N
         NombreDeUsuarioLabel.setText("<Nombre de Usuario>");
 
-        IniciarSopaDeLetrasButon.setText("Iniciar Sopa de Letras");
+        IdiomaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Náhuatl", "Huasteco" }));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Náhuatl", "Huasteco" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Facil", "Dificil" }));
+        DificultadComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Facil", "Dificil" }));
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Idioma a Jugar");
@@ -174,12 +309,15 @@ public class Inicio extends javax.swing.JFrame {
         jLabel8.setText("Dificultad del Juego");
 
         Iniciar4F1PBoton.setText("Iniciar 4F1P");
+        Iniciar4F1PBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Iniciar4F1PBotonMouseClicked(evt);
+            }
+        });
 
-        IniciarSopaDeLetras.setText("Iniciar Sopa de Letras");
+        IniciarSopaDeLetrasBoton.setText("Iniciar Sopa de Letras");
 
-        IniciarTrivia.setText("Iniciar Trivia");
-
-        AyudaBoton.setText("Ayuda");
+        IniciarTablero.setText("Iniciar Tablero");
 
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -189,87 +327,238 @@ public class Inicio extends javax.swing.JFrame {
         jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel11.setIconTextGap(2);
 
-        javax.swing.GroupLayout MenuPrincipalLayout = new javax.swing.GroupLayout(MenuPrincipal.getContentPane());
-        MenuPrincipal.getContentPane().setLayout(MenuPrincipalLayout);
-        MenuPrincipalLayout.setHorizontalGroup(
-            MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MenuPrincipalLayout.createSequentialGroup()
+        IniciarTrivia.setText("Iniciar Trivia");
+
+        EditarPerfilBoton.setText("Editar Perfil");
+        EditarPerfilBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EditarPerfilBotonMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MenuPrincipalUsuarioLayout = new javax.swing.GroupLayout(MenuPrincipalUsuario.getContentPane());
+        MenuPrincipalUsuario.getContentPane().setLayout(MenuPrincipalUsuarioLayout);
+        MenuPrincipalUsuarioLayout.setHorizontalGroup(
+            MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuPrincipalLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(NombreDeUsuarioLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AyudaBoton))
-                    .addComponent(IniciarSopaDeLetras, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
-                    .addComponent(IniciarTrivia, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
-                    .addGroup(MenuPrincipalLayout.createSequentialGroup()
-                        .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
-                            .addComponent(IniciarSopaDeLetrasButon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalUsuarioLayout.createSequentialGroup()
+                        .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(IniciarTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(IniciarSopaDeLetrasBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Iniciar4F1PBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(MenuPrincipalLayout.createSequentialGroup()
-                                .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
+                                .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(DificultadComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
                                 .addGap(49, 49, 49)
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addContainerGap())
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)))
+                                .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(IdiomaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(IniciarTrivia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalUsuarioLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(NombreDeUsuarioLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(EditarPerfilBoton))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
-        MenuPrincipalLayout.setVerticalGroup(
-            MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MenuPrincipalLayout.createSequentialGroup()
+        MenuPrincipalUsuarioLayout.setVerticalGroup(
+            MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NombreDeUsuarioLabel)
-                    .addComponent(AyudaBoton))
+                    .addComponent(EditarPerfilBoton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MenuPrincipalLayout.createSequentialGroup()
+                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MenuPrincipalLayout.createSequentialGroup()
+                        .addComponent(DificultadComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(MenuPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalLayout.createSequentialGroup()
+                        .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalUsuarioLayout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(IdiomaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(IniciarTablero)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(IniciarTrivia)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(IniciarSopaDeLetras)
+                .addComponent(IniciarSopaDeLetrasBoton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Iniciar4F1PBoton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(IniciarSopaDeLetrasButon)
-                .addContainerGap())
+                .addGap(35, 35, 35))
         );
 
-        javax.swing.GroupLayout AyudaLayout = new javax.swing.GroupLayout(Ayuda.getContentPane());
-        Ayuda.getContentPane().setLayout(AyudaLayout);
-        AyudaLayout.setHorizontalGroup(
-            AyudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        MenuPrincipalAdministrador.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        MenuPrincipalAdministrador.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        javax.swing.GroupLayout MenuPrincipalAdministradorLayout = new javax.swing.GroupLayout(MenuPrincipalAdministrador.getContentPane());
+        MenuPrincipalAdministrador.getContentPane().setLayout(MenuPrincipalAdministradorLayout);
+        MenuPrincipalAdministradorLayout.setHorizontalGroup(
+            MenuPrincipalAdministradorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        AyudaLayout.setVerticalGroup(
-            AyudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        MenuPrincipalAdministradorLayout.setVerticalGroup(
+            MenuPrincipalAdministradorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        JuegoTableroAyuda.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoTableroAyuda.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        javax.swing.GroupLayout JuegoTableroAyudaLayout = new javax.swing.GroupLayout(JuegoTableroAyuda.getContentPane());
+        JuegoTableroAyuda.getContentPane().setLayout(JuegoTableroAyudaLayout);
+        JuegoTableroAyudaLayout.setHorizontalGroup(
+            JuegoTableroAyudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        JuegoTableroAyudaLayout.setVerticalGroup(
+            JuegoTableroAyudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        JuegoTablero.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoTablero.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        javax.swing.GroupLayout JuegoTableroLayout = new javax.swing.GroupLayout(JuegoTablero.getContentPane());
+        JuegoTablero.getContentPane().setLayout(JuegoTableroLayout);
+        JuegoTableroLayout.setHorizontalGroup(
+            JuegoTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        JuegoTableroLayout.setVerticalGroup(
+            JuegoTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        JuegoTrivia.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoTrivia.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        javax.swing.GroupLayout JuegoTriviaLayout = new javax.swing.GroupLayout(JuegoTrivia.getContentPane());
+        JuegoTrivia.getContentPane().setLayout(JuegoTriviaLayout);
+        JuegoTriviaLayout.setHorizontalGroup(
+            JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        JuegoTriviaLayout.setVerticalGroup(
+            JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        JuegoSopaDeLetras.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoSopaDeLetras.setMinimumSize(new java.awt.Dimension(339, 330));
+
+        javax.swing.GroupLayout JuegoSopaDeLetrasLayout = new javax.swing.GroupLayout(JuegoSopaDeLetras.getContentPane());
+        JuegoSopaDeLetras.getContentPane().setLayout(JuegoSopaDeLetrasLayout);
+        JuegoSopaDeLetrasLayout.setHorizontalGroup(
+            JuegoSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        JuegoSopaDeLetrasLayout.setVerticalGroup(
+            JuegoSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jLabelImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Juego4F1P/conetl.jpg"))); // NOI18N
+
+        answerField.setBackground(new java.awt.Color(255, 204, 102));
+        answerField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        answerField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 204, 255)));
+        answerField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                answerFieldActionPerformed(evt);
+            }
+        });
+
+        checkButton.setBackground(new java.awt.Color(102, 153, 255));
+        checkButton.setFont(new java.awt.Font("Verdana", 3, 12)); // NOI18N
+        checkButton.setText("COMPROBAR");
+        checkButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkButtonjButtonVerificarActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI Black", 3, 24)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("4 FOTOS 1 PALABRA");
+
+        jTextField1.setBackground(new java.awt.Color(204, 255, 102));
+        jTextField1.setFont(new java.awt.Font("Segoe UI Black", 3, 12)); // NOI18N
+        jTextField1.setText("Dificultad");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setBackground(new java.awt.Color(255, 255, 102));
+        jTextField2.setFont(new java.awt.Font("Segoe UI Black", 3, 12)); // NOI18N
+        jTextField2.setText("Lengua:");
+
+        javax.swing.GroupLayout Juego4F1PLayout = new javax.swing.GroupLayout(Juego4F1P.getContentPane());
+        Juego4F1P.getContentPane().setLayout(Juego4F1PLayout);
+        Juego4F1PLayout.setHorizontalGroup(
+            Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Juego4F1PLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Juego4F1PLayout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DificultadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LenguaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(Juego4F1PLayout.createSequentialGroup()
+                        .addComponent(jLabelImagen)
+                        .addGap(18, 18, 18)
+                        .addGroup(Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(answerField, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                            .addComponent(checkButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        Juego4F1PLayout.setVerticalGroup(
+            Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Juego4F1PLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DificultadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LenguaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel15)
+                .addGap(18, 18, 18)
+                .addGroup(Juego4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Juego4F1PLayout.createSequentialGroup()
+                        .addComponent(answerField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelImagen))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(339, 330));
 
         LoginFondo.setBackground(new java.awt.Color(234, 217, 181));
 
@@ -278,8 +567,18 @@ public class Inicio extends javax.swing.JFrame {
         jLabel1.setText("Bienvenido");
 
         IrARegistrarseBoton.setText("Registrarse");
+        IrARegistrarseBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IrARegistrarseBotonMouseClicked(evt);
+            }
+        });
 
         IrAIniciarSesionBoton.setText("Iniciar Sesión");
+        IrAIniciarSesionBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IrAIniciarSesionBotonMouseClicked(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -328,6 +627,170 @@ public class Inicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void IrAIniciarSesionBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IrAIniciarSesionBotonMouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        IniciarSesion.setVisible(true);
+    }//GEN-LAST:event_IrAIniciarSesionBotonMouseClicked
+
+    private void IrARegistrarseBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IrARegistrarseBotonMouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Registrarse.setVisible(true);
+    }//GEN-LAST:event_IrARegistrarseBotonMouseClicked
+
+    private void IniciarSesionBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarSesionBotonMouseClicked
+        // TODO add your handling code here:
+        String nombre_de_usuario = NombreDeUsuarioTextField.getText();
+        String password = String.valueOf(ContrasenaDelUsuarioTextField.getPassword());
+        
+        if (nombre_de_usuario.isBlank() || nombre_de_usuario.isEmpty() || password.isBlank() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor llena todos los campos");
+            return;
+        }
+        
+        try {
+            usuario_seleccionado = usuarios.login(nombre_de_usuario, password);
+            IniciarSesion.setVisible(false);
+            
+            switch (usuario_seleccionado.getTipoDeUsuario()) {
+                case ADMINISTRADOR:
+                    MenuPrincipalAdministrador.setVisible(true);
+                    break;
+                case JUGADOR:
+                    MenuPrincipalUsuario.setVisible(true);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(rootPane, "Tipo de usuario desconocido");
+                    this.setVisible(true);
+            }
+            
+        } catch (UsuariosException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error al iniciar sesión: " + ex);
+        }
+
+    }//GEN-LAST:event_IniciarSesionBotonMouseClicked
+
+    private void RegistrarUsuarioBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegistrarUsuarioBotonMouseClicked
+        // TODO add your handling code here:
+        String nombre_de_usuario = NombreDelNuevoDeUsuarioTextField.getText();
+        String password = String.valueOf(ContrasenaDelNuevoUsuarioTextField.getPassword());
+        TipoDeUsuario TipoDeUsurio;
+        
+        if (nombre_de_usuario.isBlank() || nombre_de_usuario.isEmpty() || password.isBlank() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor llena todos los campos");
+            return;
+        }
+        
+        switch (TipoDeNuevoUsuarioComboBox.getSelectedItem().toString()) {
+            case "Jugador":
+                TipoDeUsurio = TipoDeUsuario.JUGADOR;
+                break;
+            
+            case "Administrador":
+                TipoDeUsurio = TipoDeUsuario.ADMINISTRADOR;
+                break;
+            
+            default:
+                JOptionPane.showMessageDialog(rootPane, "Opción Invalida");
+                return;
+        }
+        
+        Usuario nuevo_usuario = new Usuario(nombre_de_usuario, password, TipoDeUsurio);
+        
+        try {
+            usuarios.agregarUsuario(nuevo_usuario);
+        } catch (UsuariosException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Imposible de agregar usuario: " + ex);
+        }
+
+    }//GEN-LAST:event_RegistrarUsuarioBotonMouseClicked
+
+    private void GuardarEdicionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarEdicionMouseClicked
+        // TODO add your handling code here:
+        String nuevo_nombre_de_usuario = EditarNombdeDeUsuarioTextField.getText();
+        String nueva_contrasena = String.valueOf(EditarContrasenaTextField.getPassword());
+        String _tipo = EditarTipoDeUsuarioComboBox.getSelectedItem().toString();
+        TipoDeUsuario tipo;
+        
+        switch (_tipo) {
+            case "Jugador":
+                tipo = TipoDeUsuario.JUGADOR;
+                break;
+            case "Administrador":
+                tipo = TipoDeUsuario.ADMINISTRADOR;
+                break;
+            default:
+                JOptionPane.showMessageDialog(rootPane, "Tipo de usuario invalido");
+                return;
+        }
+        
+        if (nuevo_nombre_de_usuario.isBlank() || nuevo_nombre_de_usuario.isEmpty() || nueva_contrasena.isBlank() || nueva_contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "No puedes tener un nombre de usuario ni contraseña en blanco");
+            return;
+        }
+        
+        usuarios.editarUsuario(usuario_seleccionado, nueva_contrasena, nueva_contrasena, tipo);
+        
+        EditarPerfil.setVisible(false);
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_GuardarEdicionMouseClicked
+
+    private void EditarPerfilBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditarPerfilBotonMouseClicked
+        // TODO add your handling code here:
+        MenuPrincipalUsuario.setVisible(false);
+        EditarPerfil.setVisible(true);
+    }//GEN-LAST:event_EditarPerfilBotonMouseClicked
+
+    private void CancelarEdicionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CancelarEdicionMouseClicked
+        // TODO add your handling code here:
+        EditarPerfil.setVisible(false);
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_CancelarEdicionMouseClicked
+
+    private void Iniciar4F1PBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Iniciar4F1PBotonMouseClicked
+        // TODO add your handling code here:
+
+        MenuPrincipalUsuario.setVisible(false);
+        
+        DificultadLabel.setText(DificultadComboBox.getSelectedItem().toString());
+        LenguaLabel.setText(IdiomaComboBox.getSelectedItem().toString());
+        
+        Juego4F1P.setVisible(true);
+    }//GEN-LAST:event_Iniciar4F1PBotonMouseClicked
+
+    private void answerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerFieldActionPerformed
+        String userAnswer = answerField.getText().trim().toLowerCase();
+        String correctAnswer = palabras[currentQuestion];
+        
+        if (userAnswer.equals(correctAnswer)) {
+            JOptionPane.showMessageDialog(this, "¡Correcto!");
+            currentQuestion++; // Avanzar al siguiente nivel de juego
+            loadQuestion(); // Cargar la nueva pregunta
+        } else {
+            JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Intenta de nuevo.");
+        }
+        answerField.setText(""); // Limpiar el campo de respuesta
+    }//GEN-LAST:event_answerFieldActionPerformed
+
+    private void checkButtonjButtonVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkButtonjButtonVerificarActionPerformed
+        String userAnswer = checkButton.getText().trim().toLowerCase();
+        String correctAnswer = palabras[currentQuestion];
+        
+        if (userAnswer.equals(correctAnswer)) {
+            JOptionPane.showMessageDialog(this, "¡Correcto!");
+            currentQuestion++; // Avanzar al siguiente nivel de juego
+            loadQuestion(); // Cargar la nueva pregunta
+        } else {
+            JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Intenta de nuevo.");
+        }
+        checkButton.setText(""); // Limpiar el camp
+    }//GEN-LAST:event_checkButtonjButtonVerificarActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -364,28 +827,50 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFrame Ayuda;
-    private javax.swing.JButton AyudaBoton;
+    private javax.swing.JButton CancelarEdicion;
     private javax.swing.JPasswordField ContrasenaDelNuevoUsuarioTextField;
     private javax.swing.JPasswordField ContrasenaDelUsuarioTextField;
+    private javax.swing.JComboBox<String> DificultadComboBox;
+    private javax.swing.JTextField DificultadLabel;
+    private javax.swing.JPasswordField EditarContrasenaTextField;
+    private javax.swing.JTextField EditarNombdeDeUsuarioTextField;
+    private javax.swing.JFrame EditarPerfil;
+    private javax.swing.JButton EditarPerfilBoton;
+    private javax.swing.JComboBox<String> EditarTipoDeUsuarioComboBox;
+    private javax.swing.JToggleButton GuardarEdicion;
+    private javax.swing.JComboBox<String> IdiomaComboBox;
     private javax.swing.JButton Iniciar4F1PBoton;
     private javax.swing.JFrame IniciarSesion;
-    private javax.swing.JButton IniciarSopaDeLetras;
-    private javax.swing.JButton IniciarSopaDeLetrasButon;
+    private javax.swing.JToggleButton IniciarSesionBoton;
+    private javax.swing.JButton IniciarSopaDeLetrasBoton;
+    private javax.swing.JButton IniciarTablero;
     private javax.swing.JButton IniciarTrivia;
     private javax.swing.JButton IrAIniciarSesionBoton;
     private javax.swing.JButton IrARegistrarseBoton;
+    private javax.swing.JFrame Juego4F1P;
+    private javax.swing.JFrame JuegoSopaDeLetras;
+    private javax.swing.JFrame JuegoTablero;
+    private javax.swing.JFrame JuegoTableroAyuda;
+    private javax.swing.JFrame JuegoTrivia;
+    private javax.swing.JTextField LenguaLabel;
     private javax.swing.JPanel LoginFondo;
-    private javax.swing.JFrame MenuPrincipal;
+    private javax.swing.JFrame MenuPrincipalAdministrador;
+    private javax.swing.JFrame MenuPrincipalUsuario;
     private javax.swing.JLabel NombreDeUsuarioLabel;
     private javax.swing.JTextField NombreDeUsuarioTextField;
     private javax.swing.JTextField NombreDelNuevoDeUsuarioTextField;
+    private javax.swing.JToggleButton RegistrarUsuarioBoton;
     private javax.swing.JFrame Registrarse;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> TipoDeNuevoUsuarioComboBox;
+    private javax.swing.JTextField answerField;
+    private javax.swing.JButton checkButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -393,10 +878,13 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelImagen;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
