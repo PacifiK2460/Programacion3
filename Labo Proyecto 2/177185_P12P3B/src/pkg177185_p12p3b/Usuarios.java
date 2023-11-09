@@ -7,52 +7,61 @@
 package pkg177185_p12p3b;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JFrame;
 
-public class Usuarios{
-    private ArrayList<Usuarios> usuariosList = new ArrayList<>();
-    private int id; 
-    private String user_name;
-    private double saldo;
+public class Usuarios {
 
-    //Constructor
-    public Usuarios(int id, String user_name, double saldo) {
-        this.id = id;
-        this.user_name = user_name;
-        this.saldo = saldo;
-    }
-    
-    //Encapsulamiento
-    public int getId() 
-    {
-        return id;
-    }
-    public void setId(int id) 
-    {
-        this.id = id;
-    }
-    
-    public double getSaldo() 
-    {
-        return saldo;
-    }
-    public void setSaldo(double saldo)
-    {
-        this.saldo = saldo;
-    }
+    private ArrayList<Usuario> usuariosList = new ArrayList<>();
+    private static int last_id = 99;
 
-    public String getUser_name() 
-    {
-        return user_name;
-    }
-    
-    public void setUser_name(String user_name) 
-    {
-        this.user_name = user_name;
-    }
-    
-    public ArrayList<Usuarios> getUsuariosList() 
-    {
+    public ArrayList<Usuario> getUsuariosList() {
         return usuariosList;
     }
+
+    public void addUsuario() {
+        last_id += 1;
+        int id = last_id;
+
+        String user_name = new String();
+
+        char CaracteresEspeciales[] = {'¡', '#', '$', '&', '/', '?', '¿', '!', '.', '_'};
+
+        user_name += (char) ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += (char) ThreadLocalRandom.current().nextInt('a', 'z' + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += ThreadLocalRandom.current().nextInt(0, 9 + 1);
+        user_name += (char) CaracteresEspeciales[ThreadLocalRandom.current().nextInt(0, CaracteresEspeciales.length + 1)];
+        user_name += (char) ThreadLocalRandom.current().nextInt('A', 'Z' + 1);
+
+        double saldo = ThreadLocalRandom.current().nextInt(100, 800 + 1);
+
+        Usuario new_user = new Usuario(id, user_name, saldo);
+        usuariosList.add(new_user);
+    }
+
+    public Usuario get(int i) {
+        return usuariosList.get(i);
+    }
+
+    public int size() {
+        return usuariosList.size();
+    }
+
+    public void remove(Usuario u) {
+        usuariosList.remove(u);
+    }
+
+    public Usuario get(String name) {
+        for (Usuario user : usuariosList) {
+            if (user.getUser_name().equals(name)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 }

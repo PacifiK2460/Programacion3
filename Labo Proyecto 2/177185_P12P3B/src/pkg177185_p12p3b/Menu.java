@@ -4,11 +4,29 @@
  */
 package pkg177185_p12p3b;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 177685
  */
 public class Menu extends javax.swing.JFrame {
+
+    Usuarios usuariosList = new Usuarios();
+    Usuario usuario;
+    int turnos = 0;
+    int secuencia = 4;
+    String secuenciaPrecionada = new String();
+    ArrayList<Integer> secuenciaGenerada = new ArrayList<>();
+    ArrayList<JButton> botones = new ArrayList<>();
 
     /**
      * Creates new form Menu
@@ -46,10 +64,29 @@ public class Menu extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         combo = new javax.swing.JComboBox<>();
         btnAceptar = new javax.swing.JButton();
+        UsuariosFrame = new javax.swing.JFrame();
+        jPanel4 = new javax.swing.JPanel();
+        btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        idTextField = new javax.swing.JTextField();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        btnSalir1 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jList3 = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         btnUser = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnJugar = new javax.swing.JButton();
+
+        Juego.setMinimumSize(new java.awt.Dimension(388, 398));
 
         jLabel1.setFont(new java.awt.Font("Britannic Bold", 0, 36)); // NOI18N
         jLabel1.setText("Simon Dice...");
@@ -92,6 +129,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel4.setText("Secuencia Ingresada");
 
+        jTextField3.setEditable(false);
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -104,6 +142,10 @@ public class Menu extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        txtUser.setEditable(false);
+
+        txtSaldo.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -179,6 +221,8 @@ public class Menu extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        Seleccion.setMinimumSize(new java.awt.Dimension(370, 300));
+
         jLabel5.setFont(new java.awt.Font("Britannic Bold", 0, 14)); // NOI18N
         jLabel5.setText("Selecciona el usuario con el que quieres jugar");
 
@@ -243,6 +287,133 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(SeleccionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        UsuariosFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        UsuariosFrame.setMinimumSize(new java.awt.Dimension(400, 320));
+
+        btnAgregar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        btnAgregar.setText("+");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        btnEliminar.setText("-");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Eliminar");
+
+        jLabel7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel7.setText("ID");
+
+        jLabel8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel8.setText("Usuario");
+
+        jLabel9.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel9.setText("Saldo");
+
+        btnSalir1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        btnSalir1.setForeground(new java.awt.Color(51, 51, 51));
+        btnSalir1.setText("Salir");
+        btnSalir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalir1ActionPerformed(evt);
+            }
+        });
+
+        jScrollPane4.setViewportView(jList1);
+
+        jScrollPane5.setViewportView(jList2);
+
+        jScrollPane6.setViewportView(jList3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator2)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(26, 26, 26))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel9)
+                        .addGap(43, 43, 43))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalir1)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar)
+                    .addComponent(btnEliminar)
+                    .addComponent(jLabel6)
+                    .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(btnSalir1)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout UsuariosFrameLayout = new javax.swing.GroupLayout(UsuariosFrame.getContentPane());
+        UsuariosFrame.getContentPane().setLayout(UsuariosFrameLayout);
+        UsuariosFrameLayout.setHorizontalGroup(
+            UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(UsuariosFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        UsuariosFrameLayout.setVerticalGroup(
+            UsuariosFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(UsuariosFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -322,6 +493,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
         UsuariosFrame.setVisible(true);
+        actualizarTextArea();
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -331,6 +503,18 @@ public class Menu extends javax.swing.JFrame {
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
         Seleccion.setVisible(true);
+        combo.removeAll();
+
+        Object[] users = new Object[usuariosList.size()];
+        for (int i = 0; i < usuariosList.size(); i++) {
+            users[i] = usuariosList.get(i).getUser_name();
+        }
+        ComboBoxModel comboBoxModel = new DefaultComboBoxModel(users);
+
+        combo.setModel(comboBoxModel);
+
+        this.setVisible(false);
+
         dispose();
     }//GEN-LAST:event_btnJugarActionPerformed
 
@@ -362,11 +546,119 @@ public class Menu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_comboActionPerformed
 
+    public void animarSecuencia() {
+        secuenciaGenerada.clear();
+
+        for (int i = 0; i < secuencia; i++) {
+            int boton
+            
+            
+            // Dormimos
+            try {
+                TimeUnit.MILLISECONDS.sleep(300);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         //Juego juegosFrame = new Juego();
         dispose();
-        new Juego().setVisible(true);
+        Juego.setVisible(true);
+        botones.add(jButton6);
+        botones.add(jButton2);
+        botones.add(jButton3);
+        botones.add(jButton4);
+
+        turnos = 5;
+        secuencia = 4;
+        secuenciaPrecionada = new String();
+
+        String _username = combo.getSelectedItem().toString();
+        usuario = usuariosList.get(_username);
+
+        txtSaldo.setText("$" + usuario.getSaldo());
+        txtUser.setText(_username);
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    public void actualizarTextArea() {
+        jList1.removeAll();
+        jList2.removeAll();
+        jList3.removeAll();
+
+        DefaultListModel nombres = new DefaultListModel();
+        DefaultListModel ids = new DefaultListModel();
+        DefaultListModel saldos = new DefaultListModel();
+
+        for (int i = 0; i < usuariosList.size(); i++) {
+            Usuario t = usuariosList.get(i);
+
+            nombres.addElement(t.getUser_name());
+            ids.addElement(t.getId());
+            saldos.addElement(t.getSaldo());
+        }
+
+        jList1.setModel(ids);
+        jList2.setModel(nombres);
+        jList3.setModel(saldos);
+
+    }
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // Generar un nuevo usuario y agregarlo a la lista de usuarios
+        usuariosList.addUsuario();
+
+        // Actualizar el TextArea con los datos de los usuarios
+        actualizarTextArea();
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    public void donarSaldoMinimo(double saldoMinimo) {
+        Usuario usuario_con_menor_saldo = usuariosList.get(0);
+        Double menor_saldo = usuario_con_menor_saldo.getSaldo();
+        for (int i = 0; i < usuariosList.size(); i++) {
+            if (usuariosList.get(i).getSaldo() < menor_saldo) {
+                usuario_con_menor_saldo = usuariosList.get(i);
+                menor_saldo = usuario_con_menor_saldo.getSaldo();
+            }
+        }
+
+        if (usuario_con_menor_saldo == null) {
+            return;
+        }
+
+        usuario_con_menor_saldo.setSaldo(usuario_con_menor_saldo.getSaldo() + (saldoMinimo * 0.1));
+    }
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int idABorrar = Integer.parseInt(idTextField.getText());
+        Usuario usuarioAEliminar = null;
+
+        for (Usuario usuario : usuariosList.getUsuariosList()) {
+            if (usuario.getId() == idABorrar) {
+                usuarioAEliminar = usuario;
+                break;
+            }
+        }
+
+        if (usuarioAEliminar != null) {
+            // Donar el 10% del saldo al usuario con el saldo más bajo
+            double saldoDonado = usuarioAEliminar.getSaldo() * 0.10;
+            donarSaldoMinimo(saldoDonado);
+            // Eliminar el usuario
+            usuariosList.remove(usuarioAEliminar);
+        } else {
+            JOptionPane.showMessageDialog(null, "El usuario con el ID " + idABorrar + " no existe.");
+        }
+
+        actualizarTextArea();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalir1ActionPerformed
+        this.setVisible(true);
+        UsuariosFrame.setVisible(false);
+    }//GEN-LAST:event_btnSalir1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,11 +698,16 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame Juego;
     private javax.swing.JFrame Seleccion;
+    private javax.swing.JFrame UsuariosFrame;
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnJugar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnSalir1;
     private javax.swing.JButton btnUser;
     private javax.swing.JComboBox<String> combo;
+    private javax.swing.JTextField idTextField;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -421,10 +718,22 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<String> jList3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField txtSaldo;
     private javax.swing.JTextField txtUser;
