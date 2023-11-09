@@ -14,9 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class UsuariosFrame extends javax.swing.JFrame {
-    private ArrayList<Usuarios> usuariosList = new ArrayList<>();
-    
-    public UsuariosFrame(ArrayList<Usuarios> usuariosList) {
+    public UsuariosFrame() {
         
         setTitle("Frame Usuarios");
         setSize(400, 300);
@@ -186,7 +184,7 @@ public class UsuariosFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        new Menu(usuariosList).setVisible(true);
+        new Menu2(usuariosList).setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
