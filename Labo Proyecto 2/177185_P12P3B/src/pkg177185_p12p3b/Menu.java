@@ -4,7 +4,10 @@
  */
 package pkg177185_p12p3b;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +16,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import java.util.Timer;
+import java.util.TimerTask;
+import org.w3c.dom.css.RGBColor;
 
 /**
  *
@@ -24,9 +30,10 @@ public class Menu extends javax.swing.JFrame {
     Usuario usuario;
     int turnos = 0;
     int secuencia = 4;
-    String secuenciaPrecionada = new String();
+    ArrayList<Integer> secuenciaPrecionada = new ArrayList<>();
     ArrayList<Integer> secuenciaGenerada = new ArrayList<>();
     ArrayList<JButton> botones = new ArrayList<>();
+    ArrayList<Color> colores;
 
     /**
      * Creates new form Menu
@@ -520,18 +527,34 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        secuenciaPrecionada.add(1);
+        String txt = jTextField3.getText();
+        txt += ", B";
+        jTextField3.setText(txt);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        secuenciaPrecionada.add(2);
+        String txt = jTextField3.getText();
+        txt += ", C";
+        jTextField3.setText(txt);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        secuenciaPrecionada.add(3);
+        String txt = jTextField3.getText();
+        txt += ", D";
+        jTextField3.setText(txt);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        secuenciaPrecionada.add(0);
+        String txt = jTextField3.getText();
+        txt += ", A";
+        jTextField3.setText(txt);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -540,6 +563,34 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jTextField3.setText("");
+
+        // Comprobamos
+        if (secuenciaGenerada.size() != secuenciaPrecionada.size()) {
+            turnos--;
+            usuario.setSaldo(usuario.getSaldo() - 60);
+            JOptionPane.showMessageDialog(rootPane, "Respuesta incorrecta");
+            txtSaldo.setText("$" + usuario.getSaldo());
+            animarSecuencia();
+            return;
+        }
+
+        for (int i = 0; i < secuenciaPrecionada.size(); i++) {
+            if (!Objects.equals(secuenciaGenerada.get(i), secuenciaPrecionada.get(i))) {
+                turnos--;
+                usuario.setSaldo(usuario.getSaldo() - 60);
+                JOptionPane.showMessageDialog(rootPane, "Respuesta incorrecta");
+                txtSaldo.setText("$" + usuario.getSaldo());
+                animarSecuencia();
+                return;
+            }
+        }
+
+        JOptionPane.showMessageDialog(rootPane, "Respuesta correcta");
+        usuario.setSaldo(usuario.getSaldo() + 50);
+        txtSaldo.setText("$" + usuario.getSaldo());
+        secuencia++;
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
@@ -547,18 +598,50 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_comboActionPerformed
 
     public void animarSecuencia() {
+        jButton4.setBackground(Color.RED);
+        jButton2.setBackground(Color.BLUE);
+        jButton3.setBackground(Color.GREEN);
+        jButton4.setBackground(Color.YELLOW);
+
+        if (turnos == 0 || usuario.getSaldo() < 60) {
+            JOptionPane.showMessageDialog(rootPane, "Juego Terminado");
+
+            usuariosList.set(usuario);
+
+            Juego.setVisible(false);
+            this.setVisible(true);
+
+            return;
+        }
+
         secuenciaGenerada.clear();
+        secuenciaPrecionada.clear();
+        colores.clear();
+
+        if (secuencia > 8) {
+            secuencia = 8;
+        }
 
         for (int i = 0; i < secuencia; i++) {
-            int boton
-            
-            
+            int des = ThreadLocalRandom.current().nextInt(0, 4);
+            secuenciaGenerada.add(des);
+            JButton btn = botones.get(des);
+            Color color = btn.getBackground();
+            colores.add(color);
+            btn.setBackground(Color.GRAY);
+
+            Timer timer = new Timer();
+
             // Dormimos
-            try {
-                TimeUnit.MILLISECONDS.sleep(300);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    // Volvemos al color original
+                    btn.setBackground(color);
+
+                }
+            }, 1000);
+
         }
     }
 
@@ -573,13 +656,14 @@ public class Menu extends javax.swing.JFrame {
 
         turnos = 5;
         secuencia = 4;
-        secuenciaPrecionada = new String();
 
         String _username = combo.getSelectedItem().toString();
         usuario = usuariosList.get(_username);
 
         txtSaldo.setText("$" + usuario.getSaldo());
         txtUser.setText(_username);
+
+        animarSecuencia();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     public void actualizarTextArea() {

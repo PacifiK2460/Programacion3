@@ -64,4 +64,19 @@ public class Usuarios {
         return null;
     }
 
+    public void set(Usuario old) {
+        int index = -1;
+        for (int i = 0; i < usuariosList.size(); i++) {
+            if (usuariosList.get(i).getId() == old.getId()) {
+                index = i;
+            }
+        }
+
+        if (index == -1) {
+            return;
+        }
+
+        usuariosList.set(index, old);
+    }
+
 }
