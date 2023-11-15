@@ -609,7 +609,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="jTable1">
+                    <Component class="javax.swing.JTable" name="TablaDeUsuarios">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="2" rowCount="4">
@@ -617,7 +617,12 @@
                             <Column editable="true" title="Contrase&#xf1;a" type="java.lang.Object"/>
                           </Table>
                         </Property>
+                        <Property name="autoscrolls" type="boolean" value="false"/>
+                        <Property name="cellSelectionEnabled" type="boolean" value="true"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TablaDeUsuariosMouseClicked"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -633,6 +638,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar Usuario"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="EliminarUsuarioBotonMouseClicked"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="EliminarUsuarioTextField">
                   <Properties>
@@ -642,43 +650,6 @@
                 <Component class="javax.swing.JSeparator" name="jSeparator6">
                   <Properties>
                     <Property name="orientation" type="int" value="1"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Container class="javax.swing.JPanel" name="Estadisticas4F1P">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Estadisticas 4F1P">
-                    <Property name="tabTitle" type="java.lang.String" value="Estadisticas 4F1P"/>
-                  </JTabbedPaneConstraints>
-                </Constraint>
-              </Constraints>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="540" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="469" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel31">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;Pendiente&gt;"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -697,8 +668,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="540" max="32767" attributes="0"/>
+                          <Component id="jLabel36" pref="603" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -706,16 +677,16 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel36" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="469" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel32">
+                <Component class="javax.swing.JLabel" name="jLabel36">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;Pendiente&gt;"/>
+                    <Property name="text" type="java.lang.String" value="Usuario con mayor puntaje: "/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -734,8 +705,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="540" max="32767" attributes="0"/>
+                          <Component id="jLabel35" pref="603" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -743,16 +714,16 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="469" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel33">
+                <Component class="javax.swing.JLabel" name="jLabel35">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;Pendiente&gt;"/>
+                    <Property name="text" type="java.lang.String" value="Usuario con mayor puntaje: "/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -771,8 +742,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel34" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="540" max="32767" attributes="0"/>
+                          <Component id="jLabel34" pref="603" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -789,7 +760,44 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel34">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;Pendiente&gt;"/>
+                    <Property name="text" type="java.lang.String" value="Usuario con mayor puntaje: "/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="Estadisticas4F1P">
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                  <JTabbedPaneConstraints tabName="Estadisticas 4F1P">
+                    <Property name="tabTitle" type="java.lang.String" value="Estadisticas 4F1P"/>
+                  </JTabbedPaneConstraints>
+                </Constraint>
+              </Constraints>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel37" pref="603" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel37" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="469" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="jLabel37">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Usuario con mayor puntaje: "/>
                   </Properties>
                 </Component>
               </SubComponents>

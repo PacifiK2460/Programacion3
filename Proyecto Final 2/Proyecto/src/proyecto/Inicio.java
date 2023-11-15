@@ -9,7 +9,10 @@ import Usuarios.Usuario;
 import Usuarios.Usuarios;
 import Usuarios.UsuariosException;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -18,7 +21,7 @@ import javax.swing.*;
  */
 public class Inicio extends javax.swing.JFrame {
 
-    Usuarios usuarios = new Usuarios();
+    Usuarios usuarios;
     Usuario usuario_seleccionado;
 
     /*
@@ -45,6 +48,23 @@ public class Inicio extends javax.swing.JFrame {
      * Creates new form Inicio
      */
     public Inicio() {
+        try {
+            this.usuarios = new Usuarios(rootPane);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Imposible realizar conexión con base de datos, continuando con información temporal: " + ex);
+            try {
+                this.usuarios = new Usuarios();
+                usuarios.agregarUsuario(new Usuario("admin", "admin", TipoDeUsuario.ADMINISTRADOR));
+                usuarios.agregarUsuario(new Usuario("jugador", "jugador", TipoDeUsuario.JUGADOR));
+            } catch (UsuariosException ex1) {
+                JOptionPane.showMessageDialog(rootPane, "Imposible generar información de prueba, terminando.");
+                System.exit(0);
+            }
+        } catch (AssertionError ex) {
+            JOptionPane.showMessageDialog(rootPane, "Información no esperada en base de datos: " + ex);
+            System.exit(0);
+        }
+
         initComponents();
     }
 
@@ -102,19 +122,19 @@ public class Inicio extends javax.swing.JFrame {
         Herramientas = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TablaDeUsuarios = new javax.swing.JTable();
         jLabel30 = new javax.swing.JLabel();
         EliminarUsuarioBoton = new javax.swing.JButton();
         EliminarUsuarioTextField = new javax.swing.JTextField();
         jSeparator6 = new javax.swing.JSeparator();
-        Estadisticas4F1P = new javax.swing.JPanel();
-        jLabel31 = new javax.swing.JLabel();
         EstadisticasSopaDeLetras = new javax.swing.JPanel();
-        jLabel32 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
         EstadisticasTrivia = new javax.swing.JPanel();
-        jLabel33 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
         EstadisticasTablero = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
+        Estadisticas4F1P = new javax.swing.JPanel();
+        jLabel37 = new javax.swing.JLabel();
         JuegoTablero = new javax.swing.JFrame();
         PanelPrincipal7 = new javax.swing.JPanel();
         panel31 = new javax.swing.JPanel();
@@ -583,7 +603,7 @@ public class Inicio extends javax.swing.JFrame {
 
         jLabel29.setText("Listado de Usuarios ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TablaDeUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -594,12 +614,24 @@ public class Inicio extends javax.swing.JFrame {
                 "Nombre de Usuario", "Contraseña"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        TablaDeUsuarios.setAutoscrolls(false);
+        TablaDeUsuarios.setCellSelectionEnabled(true);
+        TablaDeUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaDeUsuariosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TablaDeUsuarios);
 
         jLabel30.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         jLabel30.setText("*Puede editar ambos valores haciendo doble click");
 
         EliminarUsuarioBoton.setText("Eliminar Usuario");
+        EliminarUsuarioBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EliminarUsuarioBotonMouseClicked(evt);
+            }
+        });
 
         EliminarUsuarioTextField.setText("Busca el usuario a eliminar");
 
@@ -643,28 +675,7 @@ public class Inicio extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Herramientas", Herramientas);
 
-        jLabel31.setText("<Pendiente>");
-
-        javax.swing.GroupLayout Estadisticas4F1PLayout = new javax.swing.GroupLayout(Estadisticas4F1P);
-        Estadisticas4F1P.setLayout(Estadisticas4F1PLayout);
-        Estadisticas4F1PLayout.setHorizontalGroup(
-            Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel31)
-                .addContainerGap(540, Short.MAX_VALUE))
-        );
-        Estadisticas4F1PLayout.setVerticalGroup(
-            Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel31)
-                .addContainerGap(469, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Estadisticas 4F1P", Estadisticas4F1P);
-
-        jLabel32.setText("<Pendiente>");
+        jLabel36.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout EstadisticasSopaDeLetrasLayout = new javax.swing.GroupLayout(EstadisticasSopaDeLetras);
         EstadisticasSopaDeLetras.setLayout(EstadisticasSopaDeLetrasLayout);
@@ -672,20 +683,20 @@ public class Inicio extends javax.swing.JFrame {
             EstadisticasSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasSopaDeLetrasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel32)
-                .addContainerGap(540, Short.MAX_VALUE))
+                .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
         );
         EstadisticasSopaDeLetrasLayout.setVerticalGroup(
             EstadisticasSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasSopaDeLetrasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel32)
+                .addComponent(jLabel36)
                 .addContainerGap(469, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Estadisticas Sopa de Letras", EstadisticasSopaDeLetras);
 
-        jLabel33.setText("<Pendiente>");
+        jLabel35.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout EstadisticasTriviaLayout = new javax.swing.GroupLayout(EstadisticasTrivia);
         EstadisticasTrivia.setLayout(EstadisticasTriviaLayout);
@@ -693,20 +704,20 @@ public class Inicio extends javax.swing.JFrame {
             EstadisticasTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasTriviaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel33)
-                .addContainerGap(540, Short.MAX_VALUE))
+                .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
         );
         EstadisticasTriviaLayout.setVerticalGroup(
             EstadisticasTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasTriviaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel33)
+                .addComponent(jLabel35)
                 .addContainerGap(469, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Estadisticas Trivia", EstadisticasTrivia);
 
-        jLabel34.setText("<Pendiente>");
+        jLabel34.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout EstadisticasTableroLayout = new javax.swing.GroupLayout(EstadisticasTablero);
         EstadisticasTablero.setLayout(EstadisticasTableroLayout);
@@ -714,8 +725,8 @@ public class Inicio extends javax.swing.JFrame {
             EstadisticasTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasTableroLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel34)
-                .addContainerGap(540, Short.MAX_VALUE))
+                .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
         );
         EstadisticasTableroLayout.setVerticalGroup(
             EstadisticasTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,6 +737,27 @@ public class Inicio extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Estadisticas Tablero", EstadisticasTablero);
+
+        jLabel37.setText("Usuario con mayor puntaje: ");
+
+        javax.swing.GroupLayout Estadisticas4F1PLayout = new javax.swing.GroupLayout(Estadisticas4F1P);
+        Estadisticas4F1P.setLayout(Estadisticas4F1PLayout);
+        Estadisticas4F1PLayout.setHorizontalGroup(
+            Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        Estadisticas4F1PLayout.setVerticalGroup(
+            Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel37)
+                .addContainerGap(469, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Estadisticas 4F1P", Estadisticas4F1P);
 
         javax.swing.GroupLayout MenuPrincipalAdministradorLayout = new javax.swing.GroupLayout(MenuPrincipalAdministrador.getContentPane());
         MenuPrincipalAdministrador.getContentPane().setLayout(MenuPrincipalAdministradorLayout);
@@ -2191,12 +2223,13 @@ public class Inicio extends javax.swing.JFrame {
 
             switch (usuario_seleccionado.getTipoDeUsuario()) {
                 case ADMINISTRADOR:
-                    JOptionPane.showMessageDialog(rootPane, "Se sigue trabajando!. Espera errores.");
+
+                    TablaDeUsuarios.removeAll();
+                    TablaDeUsuarios.setModel(usuarios.toTableModel());
 
                     MenuPrincipalAdministrador.setVisible(true);
                     break;
                 case JUGADOR:
-                    JOptionPane.showMessageDialog(rootPane, "Se sigue trabajando en los juegos!. Espera errores graves.");
 
                     MenuPrincipalUsuario.setVisible(true);
                     break;
@@ -2374,22 +2407,16 @@ public class Inicio extends javax.swing.JFrame {
         if (casilla > 0) {
             switch (casilla) {
                 case 1 -> {
-                    jugador1.setVisible(false);
                 }
                 case 2 -> {
-                    jugador2.setVisible(false);
                 }
                 case 3 -> {
-                    jugador3.setVisible(false);
                 }
                 case 4 -> {
-                    jugador4.setVisible(false);
                 }
                 case 5 -> {
-                    jugador5.setVisible(false);
                 }
                 case 6 -> {
-                    jugador6.setVisible(false);
                 }
                 case 7 -> {
                     jugador7.setVisible(false);
@@ -2456,13 +2483,10 @@ public class Inicio extends javax.swing.JFrame {
         casilla += x;
         switch (casilla) {
             case 1 -> {
-                jugador1.setVisible(true);/*Se mostrara la imagen que sera donde cae el jugador ESTO SUCEDE EN LOS SIGUIENTES CASOS*/
             }
             case 2 -> {
-                jugador2.setVisible(true);
             }
             case 3 -> {
-                jugador3.setVisible(true);
                 //muestra un mensaje de pregunta y muestra la ventana de preguntas para generar puntos
                 JOptionPane.showMessageDialog(this, "Casilla de pregunta");
                 //abre la ventana de la pregunta
@@ -2470,23 +2494,17 @@ public class Inicio extends javax.swing.JFrame {
                 //pantalla.setVisible(true);
             }
             case 4 -> {
-                jugador4.setVisible(true);
             }
             case 5 -> {
-                jugador5.setVisible(true);
                 //mensaje y posiciona en la casilla donde se indica
                 JOptionPane.showMessageDialog(this, "Casilla especial, avanza 2");
                 //le da nuevo valor a la casilla para incrementar cuando se lance el dado y lo posiciona en la nueva casilla.
                 casilla = 7;
                 jugador7.setVisible(true);
-                jugador5.setVisible(false);
             }
             case 6 -> {
-                jugador6.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Casilla de castigo, regresas 2 casillas");
                 casilla = 4;
-                jugador4.setVisible(true);
-                jugador6.setVisible(false);
             }
             case 7 -> {
                 jugador7.setVisible(true);
@@ -2598,7 +2616,6 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Te pasaste de la casilla!!\nPIERDES TUS PUNTOS!!!!!");
             casilla = 1;
             //sjugador.getJugador().get(ju).set(2, 0);
-            jugador1.setVisible(true);
             //borra los puntos y se reinicia el tablero
             //txtPuntos.setText("" + (int) jugador.getJugador().get(ju).get(2));
         }
@@ -2675,6 +2692,26 @@ public class Inicio extends javax.swing.JFrame {
         MenuPrincipalUsuario.setVisible(false);
         JuegoTrivia.setVisible(false);
     }//GEN-LAST:event_IniciarTriviaMouseClicked
+
+    private void TablaDeUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaDeUsuariosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TablaDeUsuariosMouseClicked
+
+    private void EliminarUsuarioBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EliminarUsuarioBotonMouseClicked
+        // TODO add your handling code here:
+
+        if (EliminarUsuarioTextField.getText().isBlank() || EliminarUsuarioTextField.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor introduce un nombre");
+            return;
+        }
+
+        try {
+            usuarios.eliminarUsuario(EliminarUsuarioTextField.getText());
+        } catch (UsuariosException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
+        }
+
+    }//GEN-LAST:event_EliminarUsuarioBotonMouseClicked
 
     public void load() {
         win = false;
@@ -2915,12 +2952,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel NombreDeUsuarioLabel;
     private javax.swing.JTextField NombreDeUsuarioTextField;
     private javax.swing.JTextField NombreDelNuevoDeUsuarioTextField;
-    private javax.swing.JPanel PanelPrincipal;
-    private javax.swing.JPanel PanelPrincipal1;
-    private javax.swing.JPanel PanelPrincipal2;
-    private javax.swing.JPanel PanelPrincipal3;
-    private javax.swing.JPanel PanelPrincipal4;
-    private javax.swing.JPanel PanelPrincipal5;
     private javax.swing.JPanel PanelPrincipal7;
     private javax.swing.JToggleButton RegistrarUsuarioBoton;
     private javax.swing.JFrame Registrarse;
@@ -2930,6 +2961,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton Respuesta4;
     private javax.swing.JLabel ResultadoDeLaPregunta;
     private javax.swing.JButton SiguientePregunta;
+    private javax.swing.JTable TablaDeUsuarios;
     private javax.swing.JComboBox<String> TipoDeNuevoUsuarioComboBox;
     private javax.swing.JLabel TituloDeLaPregunta;
     private javax.swing.JLabel TituloDeLaVentana;
@@ -2947,13 +2979,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -2962,10 +2988,10 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel51;
@@ -3010,11 +3036,9 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JLabel jugador1;
     private javax.swing.JLabel jugador10;
     private javax.swing.JLabel jugador11;
     private javax.swing.JLabel jugador12;
@@ -3025,23 +3049,18 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jugador17;
     private javax.swing.JLabel jugador18;
     private javax.swing.JLabel jugador19;
-    private javax.swing.JLabel jugador2;
     private javax.swing.JLabel jugador20;
     private javax.swing.JLabel jugador21;
     private javax.swing.JLabel jugador22;
     private javax.swing.JLabel jugador23;
     private javax.swing.JLabel jugador24;
     private javax.swing.JLabel jugador25;
-    private javax.swing.JLabel jugador3;
     private javax.swing.JLabel jugador32;
     private javax.swing.JLabel jugador33;
     private javax.swing.JLabel jugador34;
     private javax.swing.JLabel jugador35;
     private javax.swing.JLabel jugador36;
     private javax.swing.JLabel jugador37;
-    private javax.swing.JLabel jugador4;
-    private javax.swing.JLabel jugador5;
-    private javax.swing.JLabel jugador6;
     private javax.swing.JLabel jugador7;
     private javax.swing.JLabel jugador8;
     private javax.swing.JLabel jugador9;
@@ -3061,7 +3080,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel p7;
     private javax.swing.JLabel p8;
     private javax.swing.JLabel p9;
-    private javax.swing.JPanel panel1;
     private javax.swing.JPanel panel10;
     private javax.swing.JPanel panel11;
     private javax.swing.JPanel panel13;
@@ -3071,23 +3089,18 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JPanel panel17;
     private javax.swing.JPanel panel18;
     private javax.swing.JPanel panel19;
-    private javax.swing.JPanel panel2;
     private javax.swing.JPanel panel20;
     private javax.swing.JPanel panel21;
     private javax.swing.JPanel panel22;
     private javax.swing.JPanel panel23;
     private javax.swing.JPanel panel24;
     private javax.swing.JPanel panel25;
-    private javax.swing.JPanel panel3;
     private javax.swing.JPanel panel31;
     private javax.swing.JPanel panel32;
     private javax.swing.JPanel panel33;
     private javax.swing.JPanel panel34;
     private javax.swing.JPanel panel35;
     private javax.swing.JPanel panel36;
-    private javax.swing.JPanel panel4;
-    private javax.swing.JPanel panel5;
-    private javax.swing.JPanel panel6;
     private javax.swing.JPanel panel7;
     private javax.swing.JPanel panel8;
     private javax.swing.JPanel panel9;

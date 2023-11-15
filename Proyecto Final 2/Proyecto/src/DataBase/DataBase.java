@@ -37,4 +37,8 @@ public class DataBase {
             throw new DataBaseException("Imposible cerrar a la base de Datos", ex);
         }
     }
+
+    public PreparedStatement PreparedStatement(String sql) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
