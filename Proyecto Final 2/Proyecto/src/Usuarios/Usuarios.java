@@ -11,7 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import java.sql.*;
 import java.sql.Connection;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -30,7 +34,7 @@ public class Usuarios {
         String query = "SELECT * FROM usuarios";
         java.sql.Statement st = null;
         try {
-            st = conexion.conectar("jdbc:mysql://localhost:3306/juego", "java", "java").createStatement();
+            st = conexion.conectar("jdbc:mysql://127.0.0.1:3306/juego", "root", "").createStatement();
         } catch (DataBaseException ex) {
             throw new SQLException("Imposible conectar a la base de Datos", query, ex);
         }
@@ -56,7 +60,7 @@ public class Usuarios {
                     throw new AssertionError("Tipo de jugador desconocido.");
             }
 
-            usuarios.add(new Usuario(rs.getString("user"), rs.getString("password"), tipo));
+            usuarios.add(new Usuario(rs.getString("user"), rs.getString("password"), tipo, rs.getInt("idusuario")));
         }
     }
 
@@ -83,27 +87,29 @@ public class Usuarios {
 
         try {
             String consulta = "IINSERT INTO `usuarios`(`user`, `password`, `nivel`) VALUES ('" + nuevo_usuario.getNombreDeUsuario() + "','" + nuevo_usuario.getPassword() + "','" + ((nuevo_usuario.getTipoDeUsuario() == TipoDeUsuario.ADMINISTRADOR) ? "admin" : "jugador") + "')";
-            //PreparedStatement ps = (PreparedStatement) conexion.PreparedStatement(consulta);
-            //ps.excuteUpdate();
-
+            PreparedStatement ps = conexion.PreparedStatement(consulta);
+            ps.executeUpdate();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error en el guardado de los datos" + e);
         }
     }
 
-    public void editarUsuario(Usuario usuario_a_editar, String nuevo_nombre, String nueva_contra, TipoDeUsuario nuevo_tipo) {
+    public void editarUsuario(Usuario usuario_a_editar, String nuevo_nombre, String nueva_contra, TipoDeUsuario nuevo_tipo) throws SQLException {
         int index_de_usuario = usuarios.indexOf(usuario_a_editar);
 
         usuario_a_editar.setNombre(nuevo_nombre);
         usuario_a_editar.setPass(nueva_contra);
         usuario_a_editar.setTipo(nuevo_tipo);
 
+        String consulta = "UPDATE usuarios SET user = " + nuevo_nombre + ", password = " + nueva_contra + ", nivel = " + ((nuevo_tipo == TipoDeUsuario.ADMINISTRADOR) ? "admin" : "jugador") + "WHERE idusuario = " + usuario_a_editar.getId();
+        PreparedStatement ps = conexion.PreparedStatement(consulta);
+        ps.executeUpdate();
+
         // TODO: Demas modificaciones en base de datos
         usuarios.set(index_de_usuario, usuario_a_editar);
-
     }
 
-    public TableModel toTableModel() {
+    public TableModel toTableModel(Component rootPane) {
         // Create a 2D array to hold the data
         Object[][] data = new Object[usuarios.size()][2];
 
@@ -145,7 +151,11 @@ public class Usuarios {
                         return;
                 }
 
-                editarUsuario(usuario_a_modificar, nuevo_nombre, nueva_pass, usuario_a_modificar.getTipoDeUsuario());
+                try {
+                    editarUsuario(usuario_a_modificar, nuevo_nombre, nueva_pass, usuario_a_modificar.getTipoDeUsuario());
+                } catch (SQLException ex) {
+                    JOptionPane.showConfirmDialog(rootPane, "Imposible realizar cambios: " + ex);
+                }
 
             }
         };
@@ -153,13 +163,30 @@ public class Usuarios {
         return tableModel;
     }
 
-    public void eliminarUsuario(String nombre) throws UsuariosException {
+    public void eliminarUsuario(String nombre) throws UsuariosException, SQLException {
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getNombreDeUsuario().equals(nombre)) {
+                String consulta = "DELETE FROM Customers WHERE idusuario = " + usuarios.get(i).getId();
+                PreparedStatement ps = conexion.PreparedStatement(consulta);
+                ps.executeUpdate();
+
                 usuarios.remove(i);
             }
         }
-        
+
         throw new UsuariosException("Usuario no encontrado");
     }
+
+    public Usuario getUsuario(int i) {
+        return usuarios.get(i);
+    }
+
+    public Usuario getUsuarioById(int id) {
+        return usuarios.stream().filter(u -> u.getId() == id).findFirst().get();
+    }
+
+    public int size() {
+        return usuarios.size();
+    }
+
 }

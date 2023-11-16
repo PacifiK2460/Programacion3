@@ -10,14 +10,16 @@ package Usuarios;
  */
 public class Usuario {
 
+    private int id;
     private String nombre_de_usuario;
     private String password;
     private TipoDeUsuario tipoDeUsuario;
 
-    public Usuario(String nombre_de_usuario, String password, TipoDeUsuario tipoDeUsuario) {
+    public Usuario(String nombre_de_usuario, String password, TipoDeUsuario tipoDeUsuario, int id) {
         this.nombre_de_usuario = nombre_de_usuario;
         this.password = password;
         this.tipoDeUsuario = tipoDeUsuario;
+        this.id = id;
     }
 
     public String getNombreDeUsuario() {
@@ -30,6 +32,10 @@ public class Usuario {
 
     public TipoDeUsuario getTipoDeUsuario() {
         return this.tipoDeUsuario;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void setNombre(String nombre) {

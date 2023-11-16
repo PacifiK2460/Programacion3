@@ -4,16 +4,20 @@
  */
 package proyecto;
 
+import Juegos.Puntaje;
+import Juegos.Puntajes;
 import Usuarios.TipoDeUsuario;
 import Usuarios.Usuario;
 import Usuarios.Usuarios;
 import Usuarios.UsuariosException;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -22,6 +26,7 @@ import javax.swing.*;
 public class Inicio extends javax.swing.JFrame {
 
     Usuarios usuarios;
+    Puntajes puntajes = new Puntajes();
     Usuario usuario_seleccionado;
 
     /*
@@ -44,6 +49,41 @@ public class Inicio extends javax.swing.JFrame {
     int casilla = 0;//en este se guardara el numero que genere el dado y lo va ir incrementando
     int turnos = 0;
 
+    // Trivia
+    String preguntas[] = {"¿Cuál es el origen de la lengua Náhuatl?", "¿Cuál es la familia de lenguas a la que pertenece el náhuatl?", "¿En qué siglo se estima que surgió la lengua Náhuatl?", "¿Qué civilización impulsó la expansión de la lengua Náhuatl en Mesoamérica?", "¿Cuál es la palabra náhuatl para <<agua>>?", "¿Cómo se dice <<sol>> en náhuatl?", "¿Cómo se dice <<luna>> en náhuatl?", "¿Cómo se dice <<niño>> en náhuatl?", "¿Cómo se dice <<mujer>> en náhuatl?", "¿Cómo se dice <<hombre>> en náhuatl?", "¿Cómo se dice <<fuego> en náhuatl?", "¿Cómo se dice <<tierra>> en náhuatl?", "¿Cómo se dice <<cielo>> en náhuatl?", "¿Cómo se dice <<flor>> en náhuatl?", "¿Cómo se dice <<casa>> en náhuatl?"};
+    String opciones[][] = {{"Europa", "Asia", "África", "América"}, {" Indo-europea", " Sino-tibetana", "Uto-azteca", "Afroasiática"}, {"Siglo I", "Siglo III", "Siglo V", " Siglo VII"}, {"Maya", "Inca", "Tolteca", "Azteca"}, {"Tlaloc", "Atl", "Teotl", "Tlilli"}, {"Xochitl", "Tonatiuh", "Tlaloc", "Quetzalcoatl"}, {"Metztli", "Xochitl", "Tlaloc", "Quetzalcoatl"}, {"Tlilli", "Tlaloc", "Pilli", "Xochitl"}, {"Cihuatl", "Xochitl", "Tlaloc", "Quetzalcoatl"}, {"Tlilli", "Tlaloc", "Pilli", "Tlacaélel"}, {"Tletl", "Xochitl", "Tlaloc", "Quetzalcoatl"}, {"Tlilli", "Tlaloc", "Pilli", "Xochitl"}, {"Ilhuicatl", "Xochitl", "Tlaloc", "Quetzalcoatl"}, {"Tlilli", "Tlaloc", "Pilli", "Xochitl"}, {"Calli", "Xochitl", "Tlaloc", "Quetzalcoatl"}};
+    int respuesta[] = {3, 2, 2, 3, 1, 1, 0, 2, 0, 3, 0, 0, 0, 3, 0};
+    int seleccionada;
+    int current;
+    int puntos = 0;
+
+    // Traductor
+    String original[] = {
+        "Amaj iuan nochipa ma mitsuanti tlauilpakilistli",
+        "Ika miak tlasotlalistli xikonselli ni pilmentsin nemaktli",
+        "Kani tiwalaj, ma titlajtokan totlajtol nochipa",
+        "Quen otimotlanextilih notlazohtzin",
+        "Amaj iuan nochipa tonalli nelia xiyolpakto",
+        "Ximeua, ximijyoti, xiixuetska, uan xijnemilli xinejnemi",
+        "Xijtemiki, ximonekilli, xichiua",
+        "Nimitztlazohtla nochi noyollo",
+        "Nochipa ipan noyoltsin",
+        "Amaj iuan nochipa nijneki ma mitspano nochi tlen kualli"
+    };
+
+    String traduccion[] = {
+        "Que hoy y siempre la luz de la alegría te acompañe",
+        "Para ti este pequeño detallito con mucho amor",
+        "Donde vayamos, hablemos siempre nuestra lengua",
+        "¿Cómo amaneciste, amor mío?",
+        "Hoy en este día y siempre serás muy feliz",
+        "Levántate, respira, sonríe y sigue adelante",
+        "Suéñalo, deséalo, hazlo",
+        "Te amo con todo mi corazón",
+        "Siempre en mi corazón",
+        "Hoy y siempre te deseo lo mejor"
+    };
+
     /**
      * Creates new form Inicio
      */
@@ -54,8 +94,8 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Imposible realizar conexión con base de datos, continuando con información temporal: " + ex);
             try {
                 this.usuarios = new Usuarios();
-                usuarios.agregarUsuario(new Usuario("admin", "admin", TipoDeUsuario.ADMINISTRADOR));
-                usuarios.agregarUsuario(new Usuario("jugador", "jugador", TipoDeUsuario.JUGADOR));
+                usuarios.agregarUsuario(new Usuario("admin", "admin", TipoDeUsuario.ADMINISTRADOR, 1));
+                usuarios.agregarUsuario(new Usuario("jugador", "jugador", TipoDeUsuario.JUGADOR, 2));
             } catch (UsuariosException ex1) {
                 JOptionPane.showMessageDialog(rootPane, "Imposible generar información de prueba, terminando.");
                 System.exit(0);
@@ -117,8 +157,10 @@ public class Inicio extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         IniciarTrivia = new javax.swing.JButton();
         EditarPerfilBoton = new javax.swing.JButton();
+        IniciarMemorama = new javax.swing.JButton();
+        IniciarTraduccion = new javax.swing.JButton();
         MenuPrincipalAdministrador = new javax.swing.JFrame();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        TriviaTabla = new javax.swing.JTabbedPane();
         Herramientas = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -129,32 +171,72 @@ public class Inicio extends javax.swing.JFrame {
         jSeparator6 = new javax.swing.JSeparator();
         EstadisticasSopaDeLetras = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
+        SopaDeLetrasUsuario = new javax.swing.JLabel();
+        SopaDeLetrasPuntaje = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        jLabel20 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        SopaDeLetrasTabla = new javax.swing.JTable();
         EstadisticasTrivia = new javax.swing.JPanel();
-        jLabel35 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        triviaTabla = new javax.swing.JTable();
+        jLabel21 = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        TriviaPuntaje = new javax.swing.JLabel();
+        TriviaUsuario = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
         EstadisticasTablero = new javax.swing.JPanel();
-        jLabel34 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tableroTabla = new javax.swing.JTable();
+        jLabel31 = new javax.swing.JLabel();
+        jSeparator10 = new javax.swing.JSeparator();
+        TableroPuntos = new javax.swing.JLabel();
+        TableroUsuario = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
         Estadisticas4F1P = new javax.swing.JPanel();
-        jLabel37 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable = new javax.swing.JTable();
+        jLabel40 = new javax.swing.JLabel();
+        jSeparator11 = new javax.swing.JSeparator();
+        J4G1PPuntos = new javax.swing.JLabel();
+        J4F1PUsuario = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        TraduccionTabla = new javax.swing.JTable();
+        jLabel48 = new javax.swing.JLabel();
+        jSeparator13 = new javax.swing.JSeparator();
+        TraduccionPuntos = new javax.swing.JLabel();
+        TraduccionUsuario = new javax.swing.JLabel();
+        jLabel73 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        MemoramaTabla = new javax.swing.JTable();
+        jLabel74 = new javax.swing.JLabel();
+        jSeparator14 = new javax.swing.JSeparator();
+        MemoramaPuntos = new javax.swing.JLabel();
+        MemoramaUsuario = new javax.swing.JLabel();
+        jLabel77 = new javax.swing.JLabel();
         JuegoTablero = new javax.swing.JFrame();
         PanelPrincipal7 = new javax.swing.JPanel();
         panel31 = new javax.swing.JPanel();
-        jugador32 = new javax.swing.JLabel();
+        jugador1 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
         panel32 = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
-        jugador33 = new javax.swing.JLabel();
+        jugador3 = new javax.swing.JLabel();
         panel33 = new javax.swing.JPanel();
-        jugador34 = new javax.swing.JLabel();
+        jugador4 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
         panel34 = new javax.swing.JPanel();
         jLabel54 = new javax.swing.JLabel();
-        jugador35 = new javax.swing.JLabel();
+        jugador5 = new javax.swing.JLabel();
         panel35 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
-        jugador36 = new javax.swing.JLabel();
+        jugador2 = new javax.swing.JLabel();
         panel36 = new javax.swing.JPanel();
         jLabel56 = new javax.swing.JLabel();
-        jugador37 = new javax.swing.JLabel();
+        jugador6 = new javax.swing.JLabel();
         panel8 = new javax.swing.JPanel();
         jLabel57 = new javax.swing.JLabel();
         jugador8 = new javax.swing.JLabel();
@@ -218,8 +300,6 @@ public class Inicio extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         jugador7 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        btnNuevo = new javax.swing.JButton();
-        btnMenu = new javax.swing.JButton();
         txtJugador = new javax.swing.JTextField();
         txtPuntos = new javax.swing.JTextField();
         JuegoTrivia = new javax.swing.JFrame();
@@ -234,6 +314,11 @@ public class Inicio extends javax.swing.JFrame {
         SiguientePregunta = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
         ResultadoDeLaPregunta = new javax.swing.JLabel();
+        R1 = new javax.swing.JLabel();
+        R2 = new javax.swing.JLabel();
+        R3 = new javax.swing.JLabel();
+        R4 = new javax.swing.JLabel();
+        Res = new javax.swing.JLabel();
         JuegoSopaDeLetras = new javax.swing.JFrame();
         sup = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -268,14 +353,24 @@ public class Inicio extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         LenguaLabel = new javax.swing.JTextField();
         DificultadLabel = new javax.swing.JTextField();
+        Trad = new javax.swing.JFrame();
+        jLabel18 = new javax.swing.JLabel();
+        oracion = new javax.swing.JLabel();
+        Respuesta = new javax.swing.JTextField();
+        Comprobar = new javax.swing.JButton();
         LoginFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         IrARegistrarseBoton = new javax.swing.JButton();
         IrAIniciarSesionBoton = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
 
-        IniciarSesion.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        IniciarSesion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         IniciarSesion.setMinimumSize(new java.awt.Dimension(339, 330));
+        IniciarSesion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                IniciarSesionWindowClosing(evt);
+            }
+        });
 
         jLabel2.setText("Nombre de Usuario");
 
@@ -327,8 +422,13 @@ public class Inicio extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Registrarse.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Registrarse.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Registrarse.setMinimumSize(new java.awt.Dimension(339, 330));
+        Registrarse.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                RegistrarseWindowClosing(evt);
+            }
+        });
 
         jLabel4.setText("Nombre de Usuario");
 
@@ -466,9 +566,14 @@ public class Inicio extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        MenuPrincipalUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        MenuPrincipalUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         MenuPrincipalUsuario.setBackground(new java.awt.Color(234, 217, 181));
         MenuPrincipalUsuario.setMinimumSize(new java.awt.Dimension(339, 330));
+        MenuPrincipalUsuario.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                MenuPrincipalUsuarioWindowClosing(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 36)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -530,6 +635,20 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        IniciarMemorama.setText("Iniciar Memorama");
+        IniciarMemorama.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IniciarMemoramaMouseClicked(evt);
+            }
+        });
+
+        IniciarTraduccion.setText("Iniciar prueba de Traducción");
+        IniciarTraduccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IniciarTraduccionMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout MenuPrincipalUsuarioLayout = new javax.swing.GroupLayout(MenuPrincipalUsuario.getContentPane());
         MenuPrincipalUsuario.getContentPane().setLayout(MenuPrincipalUsuarioLayout);
         MenuPrincipalUsuarioLayout.setHorizontalGroup(
@@ -539,11 +658,12 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalUsuarioLayout.createSequentialGroup()
-                        .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(IniciarTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(IniciarSopaDeLetrasBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Iniciar4F1PBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
+                        .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(IniciarMemorama, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(IniciarTablero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(IniciarSopaDeLetrasBoton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Iniciar4F1PBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MenuPrincipalUsuarioLayout.createSequentialGroup()
                                 .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(DificultadComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
@@ -553,13 +673,14 @@ public class Inicio extends javax.swing.JFrame {
                                 .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(IdiomaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(IniciarTrivia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuPrincipalUsuarioLayout.createSequentialGroup()
+                            .addComponent(IniciarTrivia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(NombreDeUsuarioLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(EditarPerfilBoton))
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(IniciarTraduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         MenuPrincipalUsuarioLayout.setVerticalGroup(
@@ -572,7 +693,7 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(NombreDeUsuarioLabel)
                     .addComponent(EditarPerfilBoton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(MenuPrincipalUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(MenuPrincipalUsuarioLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -595,11 +716,20 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(IniciarSopaDeLetrasBoton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Iniciar4F1PBoton)
-                .addGap(35, 35, 35))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(IniciarMemorama)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(IniciarTraduccion)
+                .addContainerGap())
         );
 
-        MenuPrincipalAdministrador.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        MenuPrincipalAdministrador.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         MenuPrincipalAdministrador.setMinimumSize(new java.awt.Dimension(339, 330));
+        MenuPrincipalAdministrador.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                MenuPrincipalAdministradorWindowClosing(evt);
+            }
+        });
 
         jLabel29.setText("Listado de Usuarios ");
 
@@ -647,7 +777,7 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(HerramientasLayout.createSequentialGroup()
                         .addComponent(jLabel29)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 428, Short.MAX_VALUE)
                         .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(EliminarUsuarioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -667,23 +797,64 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(EliminarUsuarioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel30)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Herramientas", Herramientas);
+        TriviaTabla.addTab("Herramientas", Herramientas);
 
         jLabel36.setText("Usuario con mayor puntaje: ");
+
+        SopaDeLetrasUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        SopaDeLetrasUsuario.setText("<Usuario>");
+
+        SopaDeLetrasPuntaje.setText("<Puntos> puntos");
+
+        jLabel20.setText("Registro Historico:");
+
+        SopaDeLetrasTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(SopaDeLetrasTabla);
 
         javax.swing.GroupLayout EstadisticasSopaDeLetrasLayout = new javax.swing.GroupLayout(EstadisticasSopaDeLetras);
         EstadisticasSopaDeLetras.setLayout(EstadisticasSopaDeLetrasLayout);
         EstadisticasSopaDeLetrasLayout.setHorizontalGroup(
             EstadisticasSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EstadisticasSopaDeLetrasLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EstadisticasSopaDeLetrasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addGroup(EstadisticasSopaDeLetrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jLabel36, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(SopaDeLetrasUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SopaDeLetrasPuntaje, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         EstadisticasSopaDeLetrasLayout.setVerticalGroup(
@@ -691,95 +862,407 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(EstadisticasSopaDeLetrasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel36)
-                .addContainerGap(469, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SopaDeLetrasUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SopaDeLetrasPuntaje)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Estadisticas Sopa de Letras", EstadisticasSopaDeLetras);
+        TriviaTabla.addTab("Estadisticas Sopa de Letras", EstadisticasSopaDeLetras);
 
-        jLabel35.setText("Usuario con mayor puntaje: ");
+        triviaTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(triviaTabla);
+
+        jLabel21.setText("Registro Historico:");
+
+        TriviaPuntaje.setText("<Puntos> puntos");
+
+        TriviaUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        TriviaUsuario.setText("<Usuario>");
+
+        jLabel38.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout EstadisticasTriviaLayout = new javax.swing.GroupLayout(EstadisticasTrivia);
         EstadisticasTrivia.setLayout(EstadisticasTriviaLayout);
         EstadisticasTriviaLayout.setHorizontalGroup(
             EstadisticasTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EstadisticasTriviaLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EstadisticasTriviaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addGroup(EstadisticasTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jLabel38, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(TriviaUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TriviaPuntaje, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator9, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         EstadisticasTriviaLayout.setVerticalGroup(
             EstadisticasTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasTriviaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel35)
-                .addContainerGap(469, Short.MAX_VALUE))
+                .addComponent(jLabel38)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TriviaUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TriviaPuntaje)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Estadisticas Trivia", EstadisticasTrivia);
+        TriviaTabla.addTab("Estadisticas Trivia", EstadisticasTrivia);
 
-        jLabel34.setText("Usuario con mayor puntaje: ");
+        tableroTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tableroTabla);
+
+        jLabel31.setText("Registro Historico:");
+
+        TableroPuntos.setText("<Puntos> puntos");
+
+        TableroUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        TableroUsuario.setText("<Usuario>");
+
+        jLabel39.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout EstadisticasTableroLayout = new javax.swing.GroupLayout(EstadisticasTablero);
         EstadisticasTablero.setLayout(EstadisticasTableroLayout);
         EstadisticasTableroLayout.setHorizontalGroup(
             EstadisticasTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EstadisticasTableroLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EstadisticasTableroLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addGroup(EstadisticasTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(jLabel39, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(TableroUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TableroPuntos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator10, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel31, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         EstadisticasTableroLayout.setVerticalGroup(
             EstadisticasTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasTableroLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel34)
-                .addContainerGap(469, Short.MAX_VALUE))
+                .addComponent(jLabel39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TableroUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TableroPuntos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Estadisticas Tablero", EstadisticasTablero);
+        TriviaTabla.addTab("Estadisticas Tablero", EstadisticasTablero);
 
-        jLabel37.setText("Usuario con mayor puntaje: ");
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(jTable);
+
+        jLabel40.setText("Registro Historico:");
+
+        J4G1PPuntos.setText("<Puntos> puntos");
+
+        J4F1PUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        J4F1PUsuario.setText("<Usuario>");
+
+        jLabel43.setText("Usuario con mayor puntaje: ");
 
         javax.swing.GroupLayout Estadisticas4F1PLayout = new javax.swing.GroupLayout(Estadisticas4F1P);
         Estadisticas4F1P.setLayout(Estadisticas4F1PLayout);
         Estadisticas4F1PLayout.setHorizontalGroup(
             Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Estadisticas4F1PLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addGroup(Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane5)
+                    .addComponent(jLabel43, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(J4F1PUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(J4G1PPuntos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator11, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         Estadisticas4F1PLayout.setVerticalGroup(
             Estadisticas4F1PLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Estadisticas4F1PLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel37)
-                .addContainerGap(469, Short.MAX_VALUE))
+                .addComponent(jLabel43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(J4F1PUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(J4G1PPuntos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Estadisticas 4F1P", Estadisticas4F1P);
+        TriviaTabla.addTab("Estadisticas 4F1P", Estadisticas4F1P);
+
+        TraduccionTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(TraduccionTabla);
+
+        jLabel48.setText("Registro Historico:");
+
+        TraduccionPuntos.setText("<Puntos> puntos");
+
+        TraduccionUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        TraduccionUsuario.setText("<Usuario>");
+
+        jLabel73.setText("Usuario con mayor puntaje: ");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane7)
+                    .addComponent(jLabel73, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(TraduccionUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TraduccionPuntos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator13, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel48, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel73)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TraduccionUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TraduccionPuntos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TriviaTabla.addTab("Estadisticas Traducción", jPanel1);
+
+        MemoramaTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Usuario", "Puntaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane8.setViewportView(MemoramaTabla);
+
+        jLabel74.setText("Registro Historico:");
+
+        MemoramaPuntos.setText("<Puntos> puntos");
+
+        MemoramaUsuario.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        MemoramaUsuario.setText("<Usuario>");
+
+        jLabel77.setText("Usuario con mayor puntaje: ");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane8)
+                    .addComponent(jLabel77, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(MemoramaUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MemoramaPuntos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator14, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel74, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel77)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MemoramaUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MemoramaPuntos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel74)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TriviaTabla.addTab("Estadisticas Memorama", jPanel3);
 
         javax.swing.GroupLayout MenuPrincipalAdministradorLayout = new javax.swing.GroupLayout(MenuPrincipalAdministrador.getContentPane());
         MenuPrincipalAdministrador.getContentPane().setLayout(MenuPrincipalAdministradorLayout);
         MenuPrincipalAdministradorLayout.setHorizontalGroup(
             MenuPrincipalAdministradorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(TriviaTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         MenuPrincipalAdministradorLayout.setVerticalGroup(
             MenuPrincipalAdministradorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(TriviaTabla)
         );
 
-        JuegoTablero.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoTablero.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         JuegoTablero.setMinimumSize(new java.awt.Dimension(339, 330));
+        JuegoTablero.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                JuegoTableroWindowClosing(evt);
+            }
+        });
 
         PanelPrincipal7.setBackground(new java.awt.Color(102, 204, 255));
 
         panel31.setBackground(new java.awt.Color(204, 255, 255));
         panel31.setPreferredSize(new java.awt.Dimension(66, 66));
 
-        jugador32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
-        jugador32.setText("jugador1");
+        jugador1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
+        jugador1.setText("jugador1");
 
         jLabel51.setText("1");
 
@@ -791,7 +1274,7 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(panel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel31Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jugador32, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jugador1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel31Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -801,7 +1284,7 @@ public class Inicio extends javax.swing.JFrame {
             panel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel31Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jugador32, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jugador1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -811,8 +1294,8 @@ public class Inicio extends javax.swing.JFrame {
 
         jLabel52.setText("3");
 
-        jugador33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pregunta.png"))); // NOI18N
-        jugador33.setText("jugador3");
+        jugador3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pregunta.png"))); // NOI18N
+        jugador3.setText("jugador3");
 
         javax.swing.GroupLayout panel32Layout = new javax.swing.GroupLayout(panel32);
         panel32.setLayout(panel32Layout);
@@ -825,14 +1308,14 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel32Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jugador33, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         panel32Layout.setVerticalGroup(
             panel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel32Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jugador33, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel52))
         );
@@ -840,8 +1323,8 @@ public class Inicio extends javax.swing.JFrame {
         panel33.setBackground(new java.awt.Color(204, 255, 255));
         panel33.setPreferredSize(new java.awt.Dimension(66, 66));
 
-        jugador34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
-        jugador34.setText("jugador4");
+        jugador4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
+        jugador4.setText("jugador4");
 
         jLabel53.setText("4");
 
@@ -852,14 +1335,14 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(panel33Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jugador34, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         panel33Layout.setVerticalGroup(
             panel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel33Layout.createSequentialGroup()
-                .addComponent(jugador34)
+                .addComponent(jugador4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -869,8 +1352,8 @@ public class Inicio extends javax.swing.JFrame {
 
         jLabel54.setText("5");
 
-        jugador35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tablero.png"))); // NOI18N
-        jugador35.setText("jugador5");
+        jugador5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tablero.png"))); // NOI18N
+        jugador5.setText("jugador5");
 
         javax.swing.GroupLayout panel34Layout = new javax.swing.GroupLayout(panel34);
         panel34.setLayout(panel34Layout);
@@ -880,14 +1363,14 @@ public class Inicio extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jugador35, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jugador5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         panel34Layout.setVerticalGroup(
             panel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel34Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jugador35, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jugador5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel54)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -898,8 +1381,8 @@ public class Inicio extends javax.swing.JFrame {
 
         jLabel55.setText("2");
 
-        jugador36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
-        jugador36.setText("jugador2");
+        jugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/registro1 - copia.png"))); // NOI18N
+        jugador2.setText("jugador2");
 
         javax.swing.GroupLayout panel35Layout = new javax.swing.GroupLayout(panel35);
         panel35.setLayout(panel35Layout);
@@ -912,14 +1395,14 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel35Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jugador36, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         panel35Layout.setVerticalGroup(
             panel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel35Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jugador36, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel55))
         );
@@ -929,8 +1412,8 @@ public class Inicio extends javax.swing.JFrame {
 
         jLabel56.setText("6");
 
-        jugador37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sorpresa1.png"))); // NOI18N
-        jugador37.setText("jugador6");
+        jugador6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sorpresa1.png"))); // NOI18N
+        jugador6.setText("jugador6");
 
         javax.swing.GroupLayout panel36Layout = new javax.swing.GroupLayout(panel36);
         panel36.setLayout(panel36Layout);
@@ -939,7 +1422,7 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(panel36Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jugador37, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jugador6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panel36Layout.createSequentialGroup()
                         .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 17, Short.MAX_VALUE)))
@@ -949,7 +1432,7 @@ public class Inicio extends javax.swing.JFrame {
             panel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel36Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jugador37, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jugador6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel56))
         );
@@ -1546,24 +2029,6 @@ public class Inicio extends javax.swing.JFrame {
         jLabel28.setForeground(new java.awt.Color(255, 0, 51));
         jLabel28.setText("HAS GANADOOO!");
 
-        btnNuevo.setFont(new java.awt.Font("Bradley Hand", 0, 18)); // NOI18N
-        btnNuevo.setForeground(new java.awt.Color(0, 153, 153));
-        btnNuevo.setText("Nuevo Juego");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-
-        btnMenu.setFont(new java.awt.Font("Bradley Hand", 0, 18)); // NOI18N
-        btnMenu.setForeground(new java.awt.Color(0, 153, 153));
-        btnMenu.setText("Menu");
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
-            }
-        });
-
         txtJugador.setBackground(new java.awt.Color(153, 204, 255));
         txtJugador.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         txtJugador.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1592,10 +2057,7 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(btnDado, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PanelPrincipal7Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jLabel28))
-                    .addGroup(PanelPrincipal7Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel28)))
                 .addGap(2, 2, 2)
                 .addGroup(PanelPrincipal7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelPrincipal7Layout.createSequentialGroup()
@@ -1652,8 +2114,7 @@ public class Inicio extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(panel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(panel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(panel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(37, 37, 37))
                     .addGroup(PanelPrincipal7Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
@@ -1719,15 +2180,7 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(panel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(PanelPrincipal7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(PanelPrincipal7Layout.createSequentialGroup()
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))
-                    .addGroup(PanelPrincipal7Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(btnMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addGap(69, 69, 69))
         );
 
         javax.swing.GroupLayout JuegoTableroLayout = new javax.swing.GroupLayout(JuegoTablero.getContentPane());
@@ -1744,8 +2197,13 @@ public class Inicio extends javax.swing.JFrame {
             .addComponent(PanelPrincipal7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        JuegoTrivia.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoTrivia.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         JuegoTrivia.setMinimumSize(new java.awt.Dimension(339, 330));
+        JuegoTrivia.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                JuegoTriviaWindowClosing(evt);
+            }
+        });
 
         TituloDeLaVentana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         TituloDeLaVentana.setText("Juego de Preguntas y Respuestas");
@@ -1755,28 +2213,29 @@ public class Inicio extends javax.swing.JFrame {
 
         JugadorLabel.setText("Usuario: <Nombre de Usuario>");
 
-        Respuesta1.setText("<Respuesta 1>");
+        Respuesta1.setText("A");
         Respuesta1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Respuesta1MouseClicked(evt);
             }
         });
 
-        Respuesta2.setText("<Respuesta 2>");
+        Respuesta2.setText("B");
+        Respuesta2.setToolTipText("");
         Respuesta2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Respuesta2MouseClicked(evt);
             }
         });
 
-        Respuesta3.setText("<Respuesta 3>");
+        Respuesta3.setText("C");
         Respuesta3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Respuesta3MouseClicked(evt);
             }
         });
 
-        Respuesta4.setText("<Respuesta 4>");
+        Respuesta4.setText("D");
         Respuesta4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Respuesta4MouseClicked(evt);
@@ -1789,6 +2248,16 @@ public class Inicio extends javax.swing.JFrame {
                 SiguientePreguntaMouseClicked(evt);
             }
         });
+
+        R1.setText("jLabel18");
+
+        R2.setText("jLabel18");
+
+        R3.setText("jLabel18");
+
+        R4.setText("jLabel18");
+
+        Res.setText("Respuesta: ");
 
         javax.swing.GroupLayout JuegoTriviaLayout = new javax.swing.GroupLayout(JuegoTrivia.getContentPane());
         JuegoTrivia.getContentPane().setLayout(JuegoTriviaLayout);
@@ -1804,27 +2273,32 @@ public class Inicio extends javax.swing.JFrame {
                     .addGroup(JuegoTriviaLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(TituloDeLaPregunta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(JuegoTriviaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Respuesta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(JuegoTriviaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Respuesta2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(JuegoTriviaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Respuesta3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(JuegoTriviaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Respuesta4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JuegoTriviaLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(ResultadoDeLaPregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                        .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JuegoTriviaLayout.createSequentialGroup()
+                                .addComponent(ResultadoDeLaPregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 175, Short.MAX_VALUE))
+                            .addComponent(Res, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(SiguientePregunta, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(JuegoTriviaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator7))
-                    .addComponent(JugadorLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(JugadorLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(JuegoTriviaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Respuesta4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Respuesta3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Respuesta2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Respuesta1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(R1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(R2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(R3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(R4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         JuegoTriviaLayout.setVerticalGroup(
@@ -1839,24 +2313,38 @@ public class Inicio extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(TituloDeLaPregunta)
                 .addGap(18, 18, 18)
-                .addComponent(Respuesta1)
+                .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Respuesta1)
+                    .addComponent(R1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Respuesta2)
+                .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Respuesta2)
+                    .addComponent(R2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Respuesta3)
+                .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Respuesta3)
+                    .addComponent(R3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Respuesta4)
+                .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Respuesta4)
+                    .addComponent(R4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(JuegoTriviaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SiguientePregunta)
-                    .addComponent(ResultadoDeLaPregunta))
+                    .addComponent(ResultadoDeLaPregunta)
+                    .addComponent(Res))
                 .addContainerGap())
         );
 
-        JuegoSopaDeLetras.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        JuegoSopaDeLetras.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         JuegoSopaDeLetras.setMinimumSize(new java.awt.Dimension(339, 330));
+        JuegoSopaDeLetras.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                JuegoSopaDeLetrasWindowClosing(evt);
+            }
+        });
 
         sup.setBackground(new java.awt.Color(204, 204, 204));
         sup.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -2042,6 +2530,13 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(sup, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
+        Juego4F1P.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Juego4F1P.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                Juego4F1PWindowClosing(evt);
+            }
+        });
+
         ImagenDelJuego.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/texocotl.jpg"))); // NOI18N
 
         answerField.setBackground(new java.awt.Color(255, 204, 102));
@@ -2123,6 +2618,58 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(ImagenDelJuego))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        Trad.setMinimumSize(new java.awt.Dimension(400, 125));
+        Trad.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                TradWindowClosing(evt);
+            }
+        });
+
+        jLabel18.setText("Traduce la siguiente oración:");
+
+        oracion.setText("<Oración>");
+
+        Respuesta.setText("Respuesta");
+
+        Comprobar.setText("Comprobar");
+        Comprobar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ComprobarMouseClicked(evt);
+            }
+        });
+        Comprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComprobarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TradLayout = new javax.swing.GroupLayout(Trad.getContentPane());
+        Trad.getContentPane().setLayout(TradLayout);
+        TradLayout.setHorizontalGroup(
+            TradLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TradLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TradLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(oracion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Respuesta)
+                    .addComponent(Comprobar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        TradLayout.setVerticalGroup(
+            TradLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TradLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
+                .addComponent(oracion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Respuesta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Comprobar)
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -2225,11 +2772,194 @@ public class Inicio extends javax.swing.JFrame {
                 case ADMINISTRADOR:
 
                     TablaDeUsuarios.removeAll();
-                    TablaDeUsuarios.setModel(usuarios.toTableModel());
+                    TablaDeUsuarios.setModel(usuarios.toTableModel(rootPane));
+                    Optional<Puntaje> _p_sopa = puntajes.getMaxSopaDeLetras();
+                    Optional<Puntaje> _p_trivia = puntajes.getMaxTrivia();
+                    Optional<Puntaje> _p_tablero = puntajes.getMaxTablero();
+                    Optional<Puntaje> _p_j4f1p = puntajes.getMax4F1P();
+                    Optional<Puntaje> _P_trad = puntajes.getMaxTraduccion();
+                    Optional<Puntaje> _p_memo = puntajes.getMaxMemorama();
+
+                    if (_p_sopa.isPresent()) {
+                        Puntaje p_sopa = _p_sopa.get();
+
+                        Usuario sopaDeLetras = usuarios.getUsuarioById(p_sopa.getId());
+                        // Sopa de Letras
+                        SopaDeLetrasUsuario.setText(sopaDeLetras.getNombreDeUsuario());
+                        SopaDeLetrasPuntaje.setText(p_sopa.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDeSopaDeLetras.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDeSopaDeLetras.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDeSopaDeLetras.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel sopaDeLetrasModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        SopaDeLetrasTabla.setModel(sopaDeLetrasModel);
+                    }
+
+                    // Trivia
+                    if (_p_trivia.isPresent()) {
+                        Puntaje p_trivia = _p_trivia.get();
+                        Usuario trivia = usuarios.getUsuarioById(p_trivia.getId());
+                        TriviaUsuario.setText(trivia.getNombreDeUsuario());
+                        TriviaPuntaje.setText(p_trivia.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDeTrivia.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDeTrivia.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDeTrivia.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel triviaModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        triviaTabla.setModel(triviaModel);
+                    }
+
+                    // Tablero
+                    if (_p_tablero.isPresent()) {
+                        Puntaje p_tablero = _p_tablero.get();
+                        Usuario tablero = usuarios.getUsuarioById(p_tablero.getId());
+                        TableroUsuario.setText(tablero.getNombreDeUsuario());
+                        TableroPuntos.setText(p_tablero.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDeTablero.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDeTablero.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDeTablero.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel tableroModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        tableroTabla.setModel(tableroModel);
+                    }
+
+                    // 4F1P
+                    if (_p_j4f1p.isPresent()) {
+                        Puntaje p_j4f1p = _p_j4f1p.get();
+                        Usuario j4f1p = usuarios.getUsuarioById(p_j4f1p.getId());
+                        J4F1PUsuario.setText(j4f1p.getNombreDeUsuario());
+                        J4G1PPuntos.setText(p_j4f1p.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDe4P1F.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDe4P1F.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDe4P1F.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel jModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        jTable.setModel(jModel);
+                    }
+
+                    // Traduccion
+                    if (_P_trad.isPresent()) {
+                        Puntaje P_trad = _P_trad.get();
+                        Usuario traduccion = usuarios.getUsuarioById(P_trad.getId());
+                        TraduccionUsuario.setText(traduccion.getNombreDeUsuario());
+                        TraduccionPuntos.setText(P_trad.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDeTraduccion.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDeTraduccion.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDeTraduccion.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel tradModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        TraduccionTabla.setModel(tradModel);
+                    }
+
+                    // Memorama
+                    if (_p_memo.isPresent()) {
+                        Puntaje p_memo = _p_memo.get();
+                        Usuario memorama = usuarios.getUsuarioById(p_memo.getId());
+                        MemoramaUsuario.setText(memorama.getNombreDeUsuario());
+                        MemoramaPuntos.setText(p_memo.getPuntaje() + "puntos");
+
+                        Object[][] data = new Object[puntajes.PuntajeDeMemorama.size()][2];
+
+                        // Fill the array with data from the ArrayList
+                        for (int i = 0; i < puntajes.PuntajeDeMemorama.size(); i++) {
+                            Puntaje p = puntajes.PuntajeDeMemorama.get(i);
+                            data[i][0] = usuarios.getUsuarioById(p.getId()).getNombreDeUsuario();
+                            data[i][1] = p.getPuntaje();
+                        }
+
+                        // Create the TableModel
+                        TableModel MemoModel = new javax.swing.table.DefaultTableModel(
+                                data,
+                                new String[]{
+                                    "Nombre de Usuario", "Puntaje"
+                                }
+                        ) {
+
+                        };
+
+                        MemoramaTabla.setModel(MemoModel);
+                    }
 
                     MenuPrincipalAdministrador.setVisible(true);
                     break;
+
                 case JUGADOR:
+                    NombreDeUsuarioLabel.setText(usuario_seleccionado.getNombreDeUsuario());
 
                     MenuPrincipalUsuario.setVisible(true);
                     break;
@@ -2269,7 +2999,7 @@ public class Inicio extends javax.swing.JFrame {
                 return;
         }
 
-        Usuario nuevo_usuario = new Usuario(nombre_de_usuario, password, TipoDeUsurio);
+        Usuario nuevo_usuario = new Usuario(nombre_de_usuario, password, TipoDeUsurio, usuarios.getUsuario(usuarios.size()).getId() + 1);
 
         try {
             usuarios.agregarUsuario(nuevo_usuario);
@@ -2303,7 +3033,11 @@ public class Inicio extends javax.swing.JFrame {
             return;
         }
 
-        usuarios.editarUsuario(usuario_seleccionado, nueva_contrasena, nueva_contrasena, tipo);
+        try {
+            usuarios.editarUsuario(usuario_seleccionado, nueva_contrasena, nueva_contrasena, tipo);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Imposible editar usuario: " + ex);
+        }
 
         EditarPerfil.setVisible(false);
         MenuPrincipalUsuario.setVisible(true);
@@ -2379,6 +3113,8 @@ public class Inicio extends javax.swing.JFrame {
 
     private void IniciarSopaDeLetrasBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarSopaDeLetrasBotonMouseClicked
         // TODO add your handling code here:
+        txtJugador.setText(usuario_seleccionado.getNombreDeUsuario());
+
         word = new JLabel[]{p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
         load();
 
@@ -2392,90 +3128,22 @@ public class Inicio extends javax.swing.JFrame {
         x = (int) (Math.random() * (7 - 1) + 1);//genera numeros aleatorios del 1 al 6 para indicar el valor del dado y por ende el avance del jugador
         txt1.setText("" + x);//muestra el numero del dado que salio S
 
+        JLabel Jugadores[] = {jugador1, jugador2, jugador3, jugador4, jugador5, jugador6, jugador7, jugador8, jugador9, jugador10, jugador11, jugador12, jugador13, jugador14, jugador15, jugador16, jugador17, jugador18, jugador19, jugador20, jugador21, jugador22, jugador23, jugador24, jugador25};
+
         /*
             No mamen, quien vergas hizo esto:
         
             Al chile no entendi ni madres que chingados quisieron hacer aqui, voy a remplazar por un 42
             y ver que jetas hace
          */
-        int ju = 42;//(int) jugador.getJugador().size() - 1;//toma el tamaño del array es decir los datos guardados y le resta uno para localizar el ultimo jugador guardado ya que es el que actualmente esta jugando
+        int ju = 0;//(int) jugador.getJugador().size() - 1;//toma el tamaño del array es decir los datos guardados y le resta uno para localizar el ultimo jugador guardado ya que es el que actualmente esta jugando
         //segun la linea anterior se coloca el puntaje en el text field para que siempre aparezca segun se obtengan los puntos, al momento de aplanar el boton del dado
-        txtPuntos.setText("42");//"" + (int) jugador.getJugador().get(ju).get(2));
+        txtPuntos.setText("" + ju);//"" + (int) jugador.getJugador().get(ju).get(2));
         /*Permanecera oculta la imagen jugador mientras no sea menor a 0
         cada que se genere un numero aleatorio en el dado se compara en este switch para ocultar la
         imagen del jugador actual y pasar a la siguiente casilla*/
         if (casilla > 0) {
-            switch (casilla) {
-                case 1 -> {
-                }
-                case 2 -> {
-                }
-                case 3 -> {
-                }
-                case 4 -> {
-                }
-                case 5 -> {
-                }
-                case 6 -> {
-                }
-                case 7 -> {
-                    jugador7.setVisible(false);
-                }
-                case 8 -> {
-                    jugador8.setVisible(false);
-                }
-                case 9 -> {
-                    jugador9.setVisible(false);
-                }
-                case 10 -> {
-                    jugador10.setVisible(false);
-                }
-                case 11 -> {
-                    jugador11.setVisible(false);
-                }
-                case 12 -> {
-                    jugador12.setVisible(false);
-                }
-                case 13 -> {
-                    jugador13.setVisible(false);
-                }
-                case 14 -> {
-                    jugador14.setVisible(false);
-                }
-                case 15 -> {
-                    jugador15.setVisible(false);
-                }
-                case 16 -> {
-                    jugador16.setVisible(false);
-                }
-                case 17 -> {
-                    jugador17.setVisible(false);
-                }
-                case 18 -> {
-                    jugador18.setVisible(false);
-                }
-                case 19 -> {
-                    jugador19.setVisible(false);
-                }
-                case 20 -> {
-                    jugador20.setVisible(false);
-                }
-                case 21 -> {
-                    jugador21.setVisible(false);
-                }
-                case 22 -> {
-                    jugador22.setVisible(false);
-                }
-                case 23 -> {
-                    jugador23.setVisible(false);
-                }
-                case 24 -> {
-                    jugador24.setVisible(false);
-                }
-                case 25 -> {
-                    jugador25.setVisible(false);
-                }
-            }
+            Jugadores[casilla - 1].setVisible(false);
         }
         /*'casilla' suma el numero que sale del dado (x) a la casilla donde se encuentra colocado el jugador,
         con esto ira en aumento y avanzando el jugador casilla a casilla encontrandose en ellas acertijos o
@@ -2490,8 +3158,8 @@ public class Inicio extends javax.swing.JFrame {
                 //muestra un mensaje de pregunta y muestra la ventana de preguntas para generar puntos
                 JOptionPane.showMessageDialog(this, "Casilla de pregunta");
                 //abre la ventana de la pregunta
-                //Preguntas0 pantalla = new Preguntas0(jugador);
-                //pantalla.setVisible(true);
+                Preguntas0 pantalla = new Preguntas0();
+                pantalla.setVisible(true);
             }
             case 4 -> {
             }
@@ -2522,8 +3190,8 @@ public class Inicio extends javax.swing.JFrame {
             case 10 -> {
                 jugador10.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Casilla de pregunta");
-                //Preguntas1 pantalla = new Preguntas1(jugador);
-                //pantalla.setVisible(true);
+                Preguntas1 pantalla = new Preguntas1();
+                pantalla.setVisible(true);
             }
             case 11 -> {
                 jugador11.setVisible(true);
@@ -2539,6 +3207,7 @@ public class Inicio extends javax.swing.JFrame {
                 jugador13.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Felicidades, casilla recompenza");
                 int correcto = 5;
+                txtPuntos.setText("" + ju);
                 //jugador.puntos(correcto);
             }
             case 14 -> {
@@ -2551,8 +3220,8 @@ public class Inicio extends javax.swing.JFrame {
             case 15 -> {
                 jugador15.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Casilla de pregunta");
-                //Preguntas2 pantalla = new Preguntas2(jugador);
-                //pantalla.setVisible(true);
+                Preguntas2 pantalla = new Preguntas2();
+                pantalla.setVisible(true);
             }
             case 16 -> {
                 jugador16.setVisible(true);
@@ -2590,13 +3259,15 @@ public class Inicio extends javax.swing.JFrame {
             case 23 -> {
                 jugador23.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Casilla de pregunta");
-                //Preguntas3 pantalla = new Preguntas3(jugador);
-                //pantalla.setVisible(true);
+                Preguntas3 pantalla = new Preguntas3();
+                pantalla.setVisible(true);
             }
             case 24 -> {
                 jugador24.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Felicidades, casilla recompenza");
                 int correcto = 5;
+                ju += 5;
+                txtPuntos.setText("" + ju);
                 //jugador.puntos(correcto);
             }
             case 25 -> {
@@ -2606,6 +3277,7 @@ public class Inicio extends javax.swing.JFrame {
         //Al obtener el valor 25 en la casilla se hace la condicion donde genera el fin del juego al ocultar o mostrar mensajes e imagenes en especifico
         if (casilla == 25) {
             int correcto = 2;
+            ju += 2;
             //jugador.puntos(correcto);
             btnDado.setVisible(false);
             jLabel28.setVisible(true);
@@ -2615,25 +3287,12 @@ public class Inicio extends javax.swing.JFrame {
             //en caso de pasarse del numero de casillas es decir de 26 a mas se reiniciara el juego como castigo
             JOptionPane.showMessageDialog(this, "Te pasaste de la casilla!!\nPIERDES TUS PUNTOS!!!!!");
             casilla = 1;
+            ju = 0;
             //sjugador.getJugador().get(ju).set(2, 0);
             //borra los puntos y se reinicia el tablero
-            //txtPuntos.setText("" + (int) jugador.getJugador().get(ju).get(2));
+            txtPuntos.setText("" + ju);
         }
     }//GEN-LAST:event_btnDadoActionPerformed
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        //hace un nuevo juego para generar mas puntos para el jugador actual con el que se este jugando
-        //Juego pantalla = new Juego(jugador);
-        this.dispose();
-        //pantalla.setVisible(true);
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        //regresa al menu para que otro jugador inicie y ver los resultados
-        //Menu pantalla = new Menu(jugador);
-        this.dispose();
-        //pantalla.setVisible(true);
-    }//GEN-LAST:event_btnMenuActionPerformed
 
     private void IniciarTableroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarTableroMouseClicked
         // TODO add your handling code here:
@@ -2641,35 +3300,56 @@ public class Inicio extends javax.swing.JFrame {
         JuegoTablero.setVisible(true);
     }//GEN-LAST:event_IniciarTableroMouseClicked
 
+    public void checar() {
+        JLabel res[] = {R1, R2, R3, R4};
+        for (int i = 0; i < res.length; i++) {
+            res[i].setEnabled(false);
+        }
+
+        if (seleccionada == respuesta[current]) {
+            Res.setText("Respuesta: Correcta, +5");
+            puntos += 5;
+        } else {
+            Res.setText("Respuesta: Incorrecta, -5");
+            puntos -= 5;
+        }
+
+        SiguientePregunta.setEnabled(true);
+    }
+
     private void Respuesta1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta1MouseClicked
         // TODO add your handling code here:
         if (Respuesta1.isEnabled()) {
+            seleccionada = 0;
             //opcion_seleccionada = 0;
-            //checar();
+            checar();
         }
     }//GEN-LAST:event_Respuesta1MouseClicked
 
     private void Respuesta2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta2MouseClicked
         // TODO add your handling code here:
         if (Respuesta2.isEnabled()) {
+            seleccionada = 1;
             //opcion_seleccionada = 1;
-            //checar();
+            checar();
         }
     }//GEN-LAST:event_Respuesta2MouseClicked
 
     private void Respuesta3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta3MouseClicked
         // TODO add your handling code here:
         if (Respuesta3.isEnabled()) {
+            seleccionada = 2;
             //opcion_seleccionada = 2;
-            //checar();
+            checar();
         }
     }//GEN-LAST:event_Respuesta3MouseClicked
 
     private void Respuesta4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Respuesta4MouseClicked
         // TODO add your handling code here:
         if (Respuesta4.isEnabled()) {
+            seleccionada = 3;
             //opcion_seleccionada = 3;
-            //checar();
+            checar();
         }
     }//GEN-LAST:event_Respuesta4MouseClicked
 
@@ -2687,9 +3367,32 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_SiguientePreguntaMouseClicked
 
+    void ponerTrivia(int index) {
+        JugadorLabel.setText("Jugador: " + usuario_seleccionado.getNombreDeUsuario());
+        TituloDeLaPregunta.setText(preguntas[index]);
+
+        JLabel res[] = {R1, R2, R3, R4};
+        for (int i = 0; i < res.length; i++) {
+            res[i].setText(opciones[index][i]);
+            res[i].setEnabled(true);
+        }
+
+        Res.setText("Respuesta: ");
+        SiguientePregunta.setEnabled(false);
+
+    }
+
     private void IniciarTriviaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarTriviaMouseClicked
         // TODO add your handling code here:
         MenuPrincipalUsuario.setVisible(false);
+
+        Random rn = new Random();
+        // Escogemos una pregunta al azar
+        int index = rn.nextInt(preguntas.length - 0 + 1) + 0;
+        current = index;
+        ponerTrivia(index);
+        puntos = 0;
+
         JuegoTrivia.setVisible(false);
     }//GEN-LAST:event_IniciarTriviaMouseClicked
 
@@ -2709,9 +3412,131 @@ public class Inicio extends javax.swing.JFrame {
             usuarios.eliminarUsuario(EliminarUsuarioTextField.getText());
         } catch (UsuariosException ex) {
             JOptionPane.showMessageDialog(rootPane, "Usuario no encontrado");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Imposible elimnar usuario: " + ex);
         }
 
     }//GEN-LAST:event_EliminarUsuarioBotonMouseClicked
+
+    private void IniciarSesionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_IniciarSesionWindowClosing
+        // TODO add your handling code here:
+        IniciarSesion.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_IniciarSesionWindowClosing
+
+    private void RegistrarseWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_RegistrarseWindowClosing
+        // TODO add your handling code here:
+        Registrarse.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_RegistrarseWindowClosing
+
+    private void MenuPrincipalUsuarioWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_MenuPrincipalUsuarioWindowClosing
+        // TODO add your handling code here:
+        MenuPrincipalUsuario.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_MenuPrincipalUsuarioWindowClosing
+
+    private void MenuPrincipalAdministradorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_MenuPrincipalAdministradorWindowClosing
+        // TODO add your handling code here:
+        MenuPrincipalAdministrador.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_MenuPrincipalAdministradorWindowClosing
+
+    private void JuegoTableroWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_JuegoTableroWindowClosing
+        // TODO add your handling code here:
+        JuegoTablero.setVisible(false);
+
+        // Lectura de puntos
+        int puntos = Integer.parseInt(txtPuntos.getText());
+        JOptionPane.showMessageDialog(rootPane, "Obtuviste un total de " + puntos);
+
+        puntajes.addTablero(new Puntaje(usuario_seleccionado.getId(), puntos));
+
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_JuegoTableroWindowClosing
+
+    private void JuegoTriviaWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_JuegoTriviaWindowClosing
+        // TODO add your handling code here:
+        JuegoTrivia.setVisible(false);
+
+        puntajes.addTrivia(new Puntaje(usuario_seleccionado.getId(), puntos));
+
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_JuegoTriviaWindowClosing
+
+    private void JuegoSopaDeLetrasWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_JuegoSopaDeLetrasWindowClosing
+        // TODO add your handling code here:
+        JuegoSopaDeLetras.setVisible(false);
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_JuegoSopaDeLetrasWindowClosing
+
+    private void Juego4F1PWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_Juego4F1PWindowClosing
+        // TODO add your handling code here:
+        Juego4F1P.setVisible(false);
+        MenuPrincipalUsuario.setVisible(true);
+    }//GEN-LAST:event_Juego4F1PWindowClosing
+
+    private void IniciarMemoramaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarMemoramaMouseClicked
+        // TODO add your handling code here:
+
+        // MEMORAMA
+        Memorama mem = new Memorama();
+        mem.setVisible(true);
+    }//GEN-LAST:event_IniciarMemoramaMouseClicked
+
+    private void IniciarTraduccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarTraduccionMouseClicked
+        // TODO add your handling code here:
+        Random rn = new Random();
+        // Escogemos una pregunta al azar
+        current = rn.nextInt(original.length - 0 + 1) + 0;
+        puntos = 0;
+
+        ponerTrad();
+        this.setVisible(false);
+        Trad.setVisible(true);
+    }//GEN-LAST:event_IniciarTraduccionMouseClicked
+
+    private void ComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComprobarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComprobarActionPerformed
+
+    void ponerTrad() {
+        Random rn = new Random();
+        // Escogemos una pregunta al azar
+        current = rn.nextInt(original.length - 0 + 1) + 0;
+        oracion.setText(original[current]);
+    }
+
+    private void ComprobarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ComprobarMouseClicked
+        // TODO add your handling code here:
+
+        if (Respuesta.getText().isBlank() || Respuesta.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor responde la actividad");
+            return;
+        }
+
+        if (Respuesta.getText().equals(traduccion[current])) {
+            JOptionPane.showMessageDialog(rootPane, "¡Respuesta correcta! +10");
+            puntos += 10;
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Respuesta incorrecta :( -1");
+            puntos -= 1;
+        }
+
+        ponerTrad();
+
+
+    }//GEN-LAST:event_ComprobarMouseClicked
+
+    private void TradWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_TradWindowClosing
+        // TODO add your handling code here:
+        Trad.setVisible(false);
+        MenuPrincipalUsuario.setVisible(true);
+
+        puntajes.addTraduccion(new Puntaje(usuario_seleccionado.getId(), puntos));
+
+        this.setVisible(false);
+    }//GEN-LAST:event_TradWindowClosing
 
     public void load() {
         win = false;
@@ -2913,6 +3738,7 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelarEdicion;
+    private javax.swing.JButton Comprobar;
     private javax.swing.JPasswordField ContrasenaDelNuevoUsuarioTextField;
     private javax.swing.JPasswordField ContrasenaDelUsuarioTextField;
     private javax.swing.JComboBox<String> DificultadComboBox;
@@ -2933,13 +3759,17 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> IdiomaComboBox;
     private javax.swing.JLabel ImagenDelJuego;
     private javax.swing.JButton Iniciar4F1PBoton;
+    private javax.swing.JButton IniciarMemorama;
     private javax.swing.JFrame IniciarSesion;
     private javax.swing.JToggleButton IniciarSesionBoton;
     private javax.swing.JButton IniciarSopaDeLetrasBoton;
     private javax.swing.JButton IniciarTablero;
+    private javax.swing.JButton IniciarTraduccion;
     private javax.swing.JButton IniciarTrivia;
     private javax.swing.JButton IrAIniciarSesionBoton;
     private javax.swing.JButton IrARegistrarseBoton;
+    private javax.swing.JLabel J4F1PUsuario;
+    private javax.swing.JLabel J4G1PPuntos;
     private javax.swing.JFrame Juego4F1P;
     private javax.swing.JFrame JuegoSopaDeLetras;
     private javax.swing.JFrame JuegoTablero;
@@ -2947,28 +3777,47 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel JugadorLabel;
     private javax.swing.JTextField LenguaLabel;
     private javax.swing.JPanel LoginFondo;
+    private javax.swing.JLabel MemoramaPuntos;
+    private javax.swing.JTable MemoramaTabla;
+    private javax.swing.JLabel MemoramaUsuario;
     private javax.swing.JFrame MenuPrincipalAdministrador;
     private javax.swing.JFrame MenuPrincipalUsuario;
     private javax.swing.JLabel NombreDeUsuarioLabel;
     private javax.swing.JTextField NombreDeUsuarioTextField;
     private javax.swing.JTextField NombreDelNuevoDeUsuarioTextField;
     private javax.swing.JPanel PanelPrincipal7;
+    private javax.swing.JLabel R1;
+    private javax.swing.JLabel R2;
+    private javax.swing.JLabel R3;
+    private javax.swing.JLabel R4;
     private javax.swing.JToggleButton RegistrarUsuarioBoton;
     private javax.swing.JFrame Registrarse;
+    private javax.swing.JLabel Res;
+    private javax.swing.JTextField Respuesta;
     private javax.swing.JButton Respuesta1;
     private javax.swing.JButton Respuesta2;
     private javax.swing.JButton Respuesta3;
     private javax.swing.JButton Respuesta4;
     private javax.swing.JLabel ResultadoDeLaPregunta;
     private javax.swing.JButton SiguientePregunta;
+    private javax.swing.JLabel SopaDeLetrasPuntaje;
+    private javax.swing.JTable SopaDeLetrasTabla;
+    private javax.swing.JLabel SopaDeLetrasUsuario;
     private javax.swing.JTable TablaDeUsuarios;
+    private javax.swing.JLabel TableroPuntos;
+    private javax.swing.JLabel TableroUsuario;
     private javax.swing.JComboBox<String> TipoDeNuevoUsuarioComboBox;
     private javax.swing.JLabel TituloDeLaPregunta;
     private javax.swing.JLabel TituloDeLaVentana;
+    private javax.swing.JFrame Trad;
+    private javax.swing.JLabel TraduccionPuntos;
+    private javax.swing.JTable TraduccionTabla;
+    private javax.swing.JLabel TraduccionUsuario;
+    private javax.swing.JLabel TriviaPuntaje;
+    private javax.swing.JTabbedPane TriviaTabla;
+    private javax.swing.JLabel TriviaUsuario;
     private javax.swing.JTextField answerField;
     private javax.swing.JButton btnDado;
-    private javax.swing.JButton btnMenu;
-    private javax.swing.JButton btnNuevo;
     private javax.swing.JButton checkButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2979,7 +3828,10 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -2988,11 +3840,14 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
@@ -3018,27 +3873,45 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel29;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel48;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
+    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel jugador1;
     private javax.swing.JLabel jugador10;
     private javax.swing.JLabel jugador11;
     private javax.swing.JLabel jugador12;
@@ -3049,21 +3922,21 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jugador17;
     private javax.swing.JLabel jugador18;
     private javax.swing.JLabel jugador19;
+    private javax.swing.JLabel jugador2;
     private javax.swing.JLabel jugador20;
     private javax.swing.JLabel jugador21;
     private javax.swing.JLabel jugador22;
     private javax.swing.JLabel jugador23;
     private javax.swing.JLabel jugador24;
     private javax.swing.JLabel jugador25;
-    private javax.swing.JLabel jugador32;
-    private javax.swing.JLabel jugador33;
-    private javax.swing.JLabel jugador34;
-    private javax.swing.JLabel jugador35;
-    private javax.swing.JLabel jugador36;
-    private javax.swing.JLabel jugador37;
+    private javax.swing.JLabel jugador3;
+    private javax.swing.JLabel jugador4;
+    private javax.swing.JLabel jugador5;
+    private javax.swing.JLabel jugador6;
     private javax.swing.JLabel jugador7;
     private javax.swing.JLabel jugador8;
     private javax.swing.JLabel jugador9;
+    private javax.swing.JLabel oracion;
     private javax.swing.JLabel p1;
     private javax.swing.JLabel p10;
     private javax.swing.JLabel p11;
@@ -3105,6 +3978,8 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JPanel panel8;
     private javax.swing.JPanel panel9;
     private javax.swing.JPanel sup;
+    private javax.swing.JTable tableroTabla;
+    private javax.swing.JTable triviaTabla;
     private javax.swing.JTextField txt1;
     private javax.swing.JTextField txtJugador;
     private javax.swing.JTextField txtPuntos;
